@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="edu.wm.cs.cs301.EffieZhang.AMazeActivity">
+    tools:context="edu.wm.cs.cs301.EffieZhang.gui.AMazeActivity">
 
 
     <EditText
@@ -42,7 +42,7 @@
         android:layout_below="@+id/editTextTextPersonName"
         android:fontFamily="@font/aclonica"
         android:gravity="center"
-        android:paddingTop="16dp"
+
         android:text="Your pig get lost in a maze, go and find her"
         android:textColor="@color/black"
         android:textSize="16sp"
@@ -51,7 +51,7 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:layout_below="@+id/textView"
         app:srcCompat="@drawable/viewgame" />
 
@@ -64,6 +64,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/skillLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -71,14 +72,15 @@
             android:text="Level"
             android:textColor="#F6508B"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            />
 
         <SeekBar
-            android:id="@+id/seekBar"
+            android:id="@+id/skillBar"
             android:layout_width="250dp"
             android:layout_height="30dp"
             android:layout_marginLeft="30dp"
-            android:max="10"
+            android:max="9"
             android:thumb="@mipmap/ic_launcher_round" />
     </LinearLayout>
 
@@ -111,35 +113,37 @@
         </Spinner>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/driverLayout"
+        android:id="@+id/roomLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/builder"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        android:layout_below="@id/builder">
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:fontFamily="@font/aclonica"
-            android:text="Driver"
+            android:text="Room"
             android:textColor="#F6508B"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <Spinner
+            android:id="@+id/roomSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:id="@+id/driverSpinner"/>
+            android:layout_marginLeft="30dp" />
     </LinearLayout>
 
     <Button
         android:id="@+id/revisitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/driverLayout"
+        android:layout_below="@id/roomLayout"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:background="#050000"
         android:backgroundTint="#050000"
         android:drawableTint="#100101"
@@ -153,9 +157,9 @@
         android:id="@+id/exploreButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/driverLayout"
+        android:layout_below="@id/roomLayout"
         android:layout_marginLeft="120dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:layout_toRightOf="@id/revisitButton"
         android:background="#050000"
         android:backgroundTint="#050000"
