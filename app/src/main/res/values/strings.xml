@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">AMazeByEffieZhang</string>
+    <string-array name="builder">
+        <item>DFS</item>
+        <item>Prim</item>
+        <item>Boruvka</item>
+    </string-array>
 </resources>
