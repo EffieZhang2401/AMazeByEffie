@@ -44,13 +44,14 @@ public class AMazeActivity extends AppCompatActivity {
         SeekBar seekbar = (SeekBar)findViewById(R.id.skillBar);
         seekbar.setMax(9);
         seekbar.setProgress(0);
-
+        final int[] chosenSkillLevel = {0};
         int seekBarValue= seekbar.getProgress();
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressChangedValue = 0;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressChangedValue = progress;
+                chosenSkillLevel[0] = progress;
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -60,6 +61,7 @@ public class AMazeActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Toast.makeText(AMazeActivity.this, "Maze level is :" + progressChangedValue,
                         Toast.LENGTH_SHORT).show();
+                DataHolder.setSkillLevel(chosenSkillLevel[0]);
             }
         });
 
@@ -113,6 +115,39 @@ public class AMazeActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+        Button revisitButton = (Button) findViewById(R.id.revisitButton);
+        revisitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(getApplicationContext(), GeneratingActivity.class);
+                next.putExtra("Skill Level", seekbar.getProgress());
+                Toast.makeText(getApplicationContext(), "Pressed Revisit", Toast.LENGTH_SHORT).show();
+                Log.v("Revisit toast", "Pressed Revisit");
+                startActivity(next);
+            }
+        });
+
+        Button exploreButton = (Button) findViewById(R.id.exploreButton);
+        exploreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent next = new Intent(getApplicationContext(), GeneratingActivity.class);
+//                next.putExtra("Skill Level", skillBar.getProgress());
+//                next.putExtra("Maze Algorithm", mazeSelectSpinner.getSelectedItem().toString());
+//                next.putExtra("Rooms", roomSpinner.getSelectedItem().toString());
+
+                DataHolder.setMazeAlgorithm(mazeSelectSpinner.getSelectedItem().toString());
+                if(roomSpinner.getSelectedItem().toString().equals("Yes")){
+                    DataHolder.setRoomsOrNoRooms(true);
+                } else{
+                    DataHolder.setRoomsOrNoRooms(false);
+                }
+
+                Toast.makeText(getApplicationContext(), "Pressed Explore", Toast.LENGTH_SHORT).show();
+                Log.v("Explore toast", "Pressed Explore");
+                startActivity(next);
             }
         });
     }

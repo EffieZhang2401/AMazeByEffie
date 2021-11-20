@@ -5,7 +5,10 @@
       <map>
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.278125" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.26421151971727524" />
-        <entry key="app/src/main/res/layout/state_generating.xml" value="0.17980072463768115" />
+        <entry key="app/src/main/res/layout/fragment_first.xml" value="0.17980072463768115" />
+        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.17980072463768115" />
+        <entry key="app/src/main/res/layout/state_generating.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/state_playmanually.xml" value="0.16145833333333334" />
       </map>
     </option>
   </component>
