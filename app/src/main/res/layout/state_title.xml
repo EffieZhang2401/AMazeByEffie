@@ -42,7 +42,6 @@
         android:layout_below="@+id/editTextTextPersonName"
         android:fontFamily="@font/aclonica"
         android:gravity="center"
-
         android:text="Your pig get lost in a maze, go and find her"
         android:textColor="@color/black"
         android:textSize="16sp"
@@ -161,10 +160,6 @@
         android:layout_marginLeft="120dp"
         android:layout_marginTop="30dp"
         android:layout_toRightOf="@id/revisitButton"
-        android:background="#050000"
-        android:backgroundTint="#050000"
-        android:drawableTint="#100101"
-        android:foregroundTint="#090000"
         android:text="Explore"
         android:textColor="#FAE2E2"
         android:textSize="16sp"

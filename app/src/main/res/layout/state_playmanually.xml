@@ -5,5 +5,162 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".gui.PlayManuallyActivity">
+    <TextView
+        android:id="@+id/mapText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="168dp"
+        android:fontFamily="@font/aclonica"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="169dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Size of Map"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintBottom_toTopOf="@+id/mapSizeSeekBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/mapSizeSeekBar"
+        android:layout_width="266dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginEnd="73dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/showMapToggle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapText" />
+
+    <TextView
+        android:id="@+id/wallText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="3dp"
+        android:text="Show Visible Walls"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/solutionText"
+        app:layout_constraintTop_toBottomOf="@id/wallToggle" />
+
+    <ToggleButton
+        android:id="@+id/wallToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:onClick="showVisibleWalls"
+        android:textColor="@color/pink"
+        android:textStyle="bold"
+        android:text="ToggleButton"
+        app:layout_constraintBottom_toTopOf="@id/wallText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/solutionToggle"
+        app:layout_constraintTop_toBottomOf="@+id/mapSizeSeekBar" />
+
+    <TextView
+        android:id="@+id/showMapText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="27dp"
+        android:layout_marginEnd="67dp"
+        android:text="Show Map"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintEnd_toStartOf="@+id/solutionText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/showMapToggle" />
+    <ToggleButton
+        android:id="@+id/showMapToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="57dp"
+        android:textColor="@color/pink"
+        android:onClick="showMap"
+        android:text="ToggleButton"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/showMapText"
+        app:layout_constraintEnd_toStartOf="@id/solutionToggle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mapSizeSeekBar" />
+
+    <ToggleButton
+        android:id="@+id/solutionToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="58dp"
+        android:onClick="showSolution"
+        android:textStyle="bold"
+        android:textColor="@color/pink"
+        android:text="ToggleButton"
+        app:layout_constraintBottom_toTopOf="@id/solutionText"
+        app:layout_constraintEnd_toStartOf="@id/wallToggle"
+        app:layout_constraintStart_toEndOf="@id/showMapToggle"
+        app:layout_constraintTop_toBottomOf="@+id/mapSizeSeekBar" />
+
+    <TextView
+        android:id="@+id/solutionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="39dp"
+        android:text="Show Solution"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintEnd_toStartOf="@id/wallText"
+        app:layout_constraintStart_toEndOf="@id/showMapText"
+        app:layout_constraintTop_toBottomOf="@id/solutionToggle" />
+
+
+    <Button
+        android:id="@+id/jumpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="46dp"
+        android:layout_marginLeft="20dp"
+        android:onClick="jump"
+        android:text="JUMP"
+        app:layout_constraintEnd_toStartOf="@+id/rightButton"
+        app:layout_constraintStart_toEndOf="@+id/leftButton"
+        app:layout_constraintTop_toBottomOf="@+id/upButton"
+        />
+
+    <ImageButton
+        android:id="@+id/upButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toTopOf="@id/leftButton"
+        app:layout_constraintEnd_toStartOf="@+id/rightButton"
+        app:layout_constraintStart_toEndOf="@id/leftButton"
+        app:srcCompat="@drawable/up" />
+
+    <ImageButton
+        android:id="@+id/leftButton"
+        android:layout_marginStart="70dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="44dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/left"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/jumpButton"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/rightButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="44dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/jumpButton"
+        app:srcCompat="@drawable/right" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
