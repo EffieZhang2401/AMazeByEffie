@@ -1,13 +1,18 @@
 package edu.wm.cs.cs301.EffieZhang.gui;
 
 import android.app.Application;
-
 public class DataHolder extends Application {
     private static int skillLevel;
     private static String mazeAlgorithm;
     private static Boolean roomsOrNoRooms;
     private static String driverConfig;
     private static String robotConfig;
+    private static int pathlength;
+
+    public static void setPathlength(int len){
+        DataHolder.pathlength = len;
+    }
+    public static int getPathlength(){return pathlength;};
 
     public static void setSkillLevel(int skillLevel) {
         DataHolder.skillLevel = skillLevel;
