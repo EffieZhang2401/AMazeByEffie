@@ -42,6 +42,7 @@ public class GeneratingActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Selected: " +
                         driverSelectSpinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                 Log.v("Driver Select toast", "Selected" + driverSelectSpinner.getSelectedItem().toString());
+                DataHolder.setDriverConfig(driverSelectSpinner.getSelectedItem().toString());
             }
 
             @Override
@@ -67,6 +68,7 @@ public class GeneratingActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Selected: " +
                         robotConfigSpinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                 Log.v("Robot Config toast", "Selected" + robotConfigSpinner.getSelectedItem().toString());
+                DataHolder.setRobotConfig(robotConfigSpinner.getSelectedItem().toString());
             }
 
             @Override
@@ -101,23 +103,6 @@ public class GeneratingActivity extends AppCompatActivity {
                         } else {
                             next = new Intent(getApplicationContext(), PlayAnimationActivity.class);
                         }
-                        DataHolder.setDriverConfig(driverSelectSpinner.getSelectedItem().toString());
-
-                        switch (robotConfigSpinner.getSelectedItem().toString()) {
-                            case "Premium":
-                                next.putExtra("Robot Config", "1111");
-                                break;
-                            case "Mediocre":
-                                next.putExtra("Robot Config", "1001");
-                                break;
-                            case "So-so":
-                                next.putExtra("Robot Config", "0110");
-                                break;
-                            case "Shaky":
-                                next.putExtra("Robot Config", "0000");
-                                break;
-                        }
-                        DataHolder.setRobotConfig(robotConfigSpinner.getSelectedItem().toString());
                         startActivity(next);
                     }
                 }).start();

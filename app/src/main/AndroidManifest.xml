@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AMazeByEffieZhang">
         <activity
+            android:name=".gui.LosingActivity"
+            android:exported="false" />
+        <activity
             android:name=".gui.WinningActivity"
             android:exported="true" />
         <activity

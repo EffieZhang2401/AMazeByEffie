@@ -4,6 +4,235 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".gui.PlayAnimationActivity">
+    tools:context=".gui.PlayAnimationActivity"
+    android:background="@drawable/wall">
+    <ProgressBar
+        android:id="@+id/remainingEnergy"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="278dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="66dp"
+        android:layout_marginEnd="67dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/remainingEnergyTextView" />
+
+    <TextView
+        android:id="@+id/remainingEnergyTextView"
+        android:fontFamily="@font/aclonica"
+        android:textColor="@color/lightpink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="146dp"
+        android:layout_marginEnd="147dp"
+        android:text="Remaining Energy:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintBottom_toTopOf="@id/remainingEnergy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/animationSpeedSeekBar" />
+
+    <ToggleButton
+        android:id="@+id/showMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/aclonica"
+        android:textColor="@color/pink"
+        android:text="ToggleButton"
+        app:layout_constraintBottom_toTopOf="@+id/textView14"
+        app:layout_constraintEnd_toStartOf="@+id/animatedMapSizeSeekBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="329dp"
+        android:layout_marginBottom="17dp"
+        android:fontFamily="@font/aclonica"
+        android:textColor="@color/lightpink"
+        android:text="Show Map"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintBottom_toTopOf="@+id/leftSensorTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/showMap" />
+
+    <SeekBar
+        android:id="@+id/animatedMapSizeSeekBar"
+        android:layout_width="260dp"
+        android:layout_height="21dp"
+        android:layout_marginStart="39dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginBottom="44dp"
+        app:layout_constraintBottom_toTopOf="@+id/backSensorTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/showMap"
+        app:layout_constraintTop_toBottomOf="@+id/MapSize" />
+
+    <TextView
+        android:id="@+id/MapSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="127dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/aclonica"
+        android:textColor="@color/pink"
+        android:text="Size of Map"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintBottom_toTopOf="@id/animatedMapSizeSeekBar"
+        app:layout_constraintStart_toEndOf="@id/showMap"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ToggleButton
+        android:id="@+id/pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginBottom="31dp"
+        android:fontFamily="@font/aclonica"
+        android:textColor="@color/pink"
+        android:text="ToggleButton"
+        android:textOff="PAUSE"
+        android:textOn="START"
+        app:layout_constraintBottom_toTopOf="@+id/remainingEnergy"
+        app:layout_constraintEnd_toStartOf="@+id/animationSpeedSeekBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/go2losing" />
+
+    <SeekBar
+        android:id="@+id/animationSpeedSeekBar"
+        android:layout_width="243dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="23dp"
+        app:layout_constraintBottom_toTopOf="@+id/remainingEnergyTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/pause"
+        app:layout_constraintTop_toBottomOf="@+id/speedText" />
+
+    <TextView
+        android:id="@+id/speedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="107dp"
+        android:layout_marginEnd="82dp"
+        android:fontFamily="@font/aclonica"
+        android:textColor="@color/lightpink"
+        android:text="Animation Speed"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintBottom_toTopOf="@+id/animationSpeedSeekBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/pause"
+        app:layout_constraintTop_toBottomOf="@id/go2losing" />
+
+    <Button
+        android:id="@+id/go2winning"
+        android:layout_width="300dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="15dp"
+        android:text= "Go2Winning"
+        app:layout_constraintBottom_toTopOf="@+id/speedText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leftSensorTextView" />
+
+    <Button
+        android:id="@+id/go2losing"
+        android:layout_width="300dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="56dp"
+        android:text= "Go2losing"
+        app:layout_constraintBottom_toTopOf="@+id/speedText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/go2winning" />
+
+    <TextView
+        android:id="@+id/leftSensorTextView"
+        android:layout_width="51dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="6dp"
+        android:gravity="center"
+        android:text="Left Sensor"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/green"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/go2winning"
+        app:layout_constraintEnd_toStartOf="@+id/rightSensorTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+    <TextView
+        android:id="@+id/backSensorTextView"
+        android:layout_width="51dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="6dp"
+        android:gravity="center"
+        android:text="Back Sensor"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/green"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/go2winning"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/frontSensorTextView"
+        app:layout_constraintTop_toBottomOf="@+id/animatedMapSizeSeekBar" />
+
+    <TextView
+        android:id="@+id/rightSensorTextView"
+        android:layout_width="51dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="7dp"
+        android:gravity="center"
+        android:text="Right Sensor"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/green"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/go2winning"
+        app:layout_constraintEnd_toStartOf="@+id/frontSensorTextView"
+        app:layout_constraintStart_toEndOf="@+id/leftSensorTextView"
+        app:layout_constraintTop_toBottomOf="@+id/animatedMapSizeSeekBar" />
+
+    <TextView
+        android:id="@+id/frontSensorTextView"
+        android:layout_width="51dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="7dp"
+        android:gravity="center"
+        android:text="Front Sensor"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textColor="@color/green"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/go2winning"
+        app:layout_constraintEnd_toStartOf="@+id/backSensorTextView"
+        app:layout_constraintStart_toEndOf="@+id/rightSensorTextView"
+        app:layout_constraintTop_toBottomOf="@+id/animatedMapSizeSeekBar" />
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

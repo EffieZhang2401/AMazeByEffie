@@ -38,8 +38,8 @@ public class PlayManuallyActivity extends AppCompatActivity {
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Up", Toast.LENGTH_SHORT).show();
-                Log.v("Up", "Up");
+                Toast.makeText(getApplicationContext(), "Forward", Toast.LENGTH_SHORT).show();
+                Log.v("Forward", "Forward");
                 pathlength++;
             }
         });
@@ -50,7 +50,6 @@ public class PlayManuallyActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "left", Toast.LENGTH_SHORT).show();
                 Log.v("left", "left");
-                pathlength++;
             }
         });
 
@@ -60,7 +59,6 @@ public class PlayManuallyActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Right", Toast.LENGTH_SHORT).show();
                 Log.v("Right", "Right");
-                pathlength++;
             }
         });
         Button jump = (Button) findViewById(R.id.jumpButton);

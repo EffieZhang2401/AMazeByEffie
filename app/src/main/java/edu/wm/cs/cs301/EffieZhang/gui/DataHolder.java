@@ -9,45 +9,94 @@ public class DataHolder extends Application {
     private static String robotConfig;
     private static int pathlength;
 
+    /**
+     * Set the path length to the static int pathlength
+     * @param len
+     */
     public static void setPathlength(int len){
         DataHolder.pathlength = len;
     }
+
+    /**
+     * return the pathlength
+     * @return pathlength
+     */
     public static int getPathlength(){return pathlength;};
 
+    /**
+     * set the level of maze
+     * @param skillLevel
+     */
     public static void setSkillLevel(int skillLevel) {
         DataHolder.skillLevel = skillLevel;
     }
 
+    /**
+     * set the maze by inputting algorithm
+     * @param mazeAlgorithm
+     */
     public static void setMazeAlgorithm(String mazeAlgorithm){
         DataHolder.mazeAlgorithm= mazeAlgorithm;
     }
 
+    /**
+     * determine whether the maze is perfect or not
+     * @param rooms
+     */
     public static void setRoomsOrNoRooms(Boolean rooms){
         DataHolder.roomsOrNoRooms = rooms;
     }
 
+    /**
+     * set the driver, manual or wall follower or wizard
+     * @param  driverConfig
+     */
     public static void setDriverConfig(String driverConfig){
         DataHolder.driverConfig = driverConfig;
     }
 
+    /**
+     * set the robot by sensors
+     * @param robotConfig
+     */
     public static void setRobotConfig(String robotConfig) {
         DataHolder.robotConfig = robotConfig;
     }
 
+    /**
+     * get the level of maze
+     * @return skillLevel
+     */
     public static int getSkillLevel() { return skillLevel; }
 
+    /**
+     * get the algorithm of maze
+     * @return mazeAlgorithm
+     */
     public static String getMazeAlgorithm() {
         return mazeAlgorithm;
     }
 
+    /**
+     * get the room setting
+     * @return roomsOrNoRooms
+     */
     public static Boolean getRoomsOrNoRooms() {
         return roomsOrNoRooms;
     }
 
+    /**
+     * get the driver
+     * @return driverConfig
+     */
     public static String getDriverConfig() {
         return driverConfig;
     }
 
+    /**
+     * get the robot
+     * @return robotConfig
+     */
     public static String getRobotConfig() {
         return robotConfig;
     }
