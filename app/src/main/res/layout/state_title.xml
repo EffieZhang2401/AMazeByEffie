@@ -80,7 +80,7 @@
             android:layout_height="30dp"
             android:layout_marginLeft="30dp"
             android:max="9"
-            android:thumb="@mipmap/ic_launcher_round" />
+            />
     </LinearLayout>
 
     <LinearLayout

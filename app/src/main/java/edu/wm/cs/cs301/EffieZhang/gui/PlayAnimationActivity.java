@@ -20,7 +20,18 @@ import android.widget.ToggleButton;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import android.widget.Toast;
-
+/**
+ * This class plays the maze with either a Wall Follower or Wizard driver,
+ * depending on what the user chose in GeneratingActivity, and goes to
+ * the WinningActivity if the driver reaches the end of the maze successfully,
+ * or goes to the LosingState if the driver runs out of energy or fails for
+ * some other reason. If the user presses the back arrow, then the app
+ * will return to AMazeActivity.
+ *
+ * 	Collaboration: AMazeActivity, GeneratingActivity, WinningActivity, LosingActivity
+ *
+ * @author Effie Zhang
+ */
 public class PlayAnimationActivity extends AppCompatActivity {
     private static final String TAG = "message";
     @Override
@@ -62,8 +73,8 @@ public class PlayAnimationActivity extends AppCompatActivity {
 
     /**
      * set the sensor color according to the user's selection
-     * if sensor is reliable, then sensor is green; otherwise,
-     * sensor is red
+     * if sensor is reliable, then sensortext is green; otherwise,
+     * sensortext is red
      */
     private void setSensorColor(){
         Intent intent = getIntent();
