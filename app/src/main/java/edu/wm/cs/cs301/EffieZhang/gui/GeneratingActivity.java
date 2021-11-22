@@ -13,13 +13,26 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import android.widget.Button;
-import java.util.Timer;
-import androidx.activity.OnBackPressedCallback;
 
 import edu.wm.cs.cs301.EffieZhang.R;
 
-import android.os.Bundle;
-
+/**
+ * The GeneratingActivity class is connected to the state_generating.
+ * it allows the user to pick whether or not they
+ * want to play the maze manually or want the maze solved with a
+ * Wizard or Wall Follower robot. This class allows
+ * the user to choose a robot with four options. The maze is being loaded with
+ * a progress bar showing how much of the maze has been loaded at the bottom
+ * of the screen. After selecting the driver and robot, user can press the start
+ * process to start the game, and the progress bar would start to load. If the user
+ * select to play the game manually, the app then goes to PlayManuallyActivity.
+ * Otherwise, the app goes to PlayAnimationActivity. If the user presses the back
+ * arrow, then the app will return to AMazeActivity.
+ *
+ * Collaboration: AMazeActivity, PlayManuallyActivity, PlayAnimationActivity
+ *
+ * @author Effie Zhang
+ */
 public class GeneratingActivity extends AppCompatActivity {
 
     @Override
@@ -77,14 +90,13 @@ public class GeneratingActivity extends AppCompatActivity {
             }
         });
 
-        /**
-         * Runs a thread that increments the loading bar with some pause in between. When the loading
-         * bar is at 100 and the driver and robot configs are selected from their spinners,
-         * then the generating screen can continue.
-         */
+
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
         Button btn = (Button)findViewById(R.id.progressButton);
         btn.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Runs a thread that increments the loading bar when pressing the "start process" button.
+             */
             @Override
             public void onClick(View v) {
                 new Thread(new Runnable() {

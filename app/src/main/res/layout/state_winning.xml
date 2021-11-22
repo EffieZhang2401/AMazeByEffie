@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/congratulation" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/playagain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="292dp"
@@ -103,7 +103,7 @@
         android:textColor="@color/pink"
         android:textSize="20sp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/button8"
+        app:layout_constraintBottom_toTopOf="@+id/playagain"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userPathLengthTextView" />

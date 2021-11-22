@@ -25,7 +25,7 @@ import android.widget.Toast;
  * depending on what the user chose in GeneratingActivity, and goes to
  * the WinningActivity if the driver reaches the end of the maze successfully,
  * or goes to the LosingState if the driver runs out of energy or fails for
- * some other reason. If the user presses the back arrow, then the app
+ * some other reason. If the player presses the back arrow, then the app
  * will return to AMazeActivity.
  *
  * 	Collaboration: AMazeActivity, GeneratingActivity, WinningActivity, LosingActivity

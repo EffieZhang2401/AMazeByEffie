@@ -12,16 +12,14 @@ import android.widget.ToggleButton;
 import edu.wm.cs.cs301.EffieZhang.R;
 
 /**
- * This class allows the user to play the game manually,
- * using the front, right, and left arrows, and the jump button on
- * the screen. The user can also turn the map, solution, and visible
- * walls on and off, depending on what they want to be able to see when
- * playing the game. In addition to that, the user can change the size of
- * the map that they see if the map is on. Once the user has passed the
- * finish line, the app then goes to WinningActivity. If the user presses
- * the back arrow, then the app will return to AMazeActivity.
+ * PlayingManuallyActivity class allows the player to play the game manually by
+ * using the front, right, and left arrows, and the jump button in the middle.
+ * The player can also choose to show or not show the map, solution, and visible
+ * walls. The player can zoom in or out the size of by using the progress bar on
+ * the top.When player reach the exit, then it automatically goes to WinningActivity.
+ * If the player presses the back arrow, then the app will return to AMazeActivity.
  *
- * 	Collaboration: AMazeActivity, GeneratingActivity, WinningActivity
+ * Collaboration: AMazeActivity, GeneratingActivity, WinningActivity
  *
  * @author Effie Zhang
  */

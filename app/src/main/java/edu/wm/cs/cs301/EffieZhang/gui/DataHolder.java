@@ -1,13 +1,20 @@
 package edu.wm.cs.cs301.EffieZhang.gui;
 
 import android.app.Application;
+
+/**
+ * This dataholder can save the data collected through
+ * user's input
+ *
+ * @author effiezhang
+ */
 public class DataHolder extends Application {
-    private static int skillLevel;
-    private static String mazeAlgorithm;
-    private static Boolean roomsOrNoRooms;
+    private static int level;
     private static String driverConfig;
     private static String robotConfig;
     private static int pathlength;
+    private static String algorithm;
+    private static Boolean hasroom;
 
     /**
      * Set the path length to the static int pathlength
@@ -28,7 +35,7 @@ public class DataHolder extends Application {
      * @param skillLevel
      */
     public static void setSkillLevel(int skillLevel) {
-        DataHolder.skillLevel = skillLevel;
+        DataHolder.level = skillLevel;
     }
 
     /**
@@ -36,7 +43,7 @@ public class DataHolder extends Application {
      * @param mazeAlgorithm
      */
     public static void setMazeAlgorithm(String mazeAlgorithm){
-        DataHolder.mazeAlgorithm= mazeAlgorithm;
+        DataHolder.algorithm= mazeAlgorithm;
     }
 
     /**
@@ -44,7 +51,7 @@ public class DataHolder extends Application {
      * @param rooms
      */
     public static void setRoomsOrNoRooms(Boolean rooms){
-        DataHolder.roomsOrNoRooms = rooms;
+        DataHolder.hasroom = rooms;
     }
 
     /**
@@ -67,14 +74,14 @@ public class DataHolder extends Application {
      * get the level of maze
      * @return skillLevel
      */
-    public static int getSkillLevel() { return skillLevel; }
+    public static int getSkillLevel() { return level; }
 
     /**
      * get the algorithm of maze
      * @return mazeAlgorithm
      */
     public static String getMazeAlgorithm() {
-        return mazeAlgorithm;
+        return algorithm;
     }
 
     /**
@@ -82,7 +89,7 @@ public class DataHolder extends Application {
      * @return roomsOrNoRooms
      */
     public static Boolean getRoomsOrNoRooms() {
-        return roomsOrNoRooms;
+        return hasroom;
     }
 
     /**
