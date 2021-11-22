@@ -31,7 +31,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.state_playmanually);
-
+        pathlength = 0;
         ImageButton upButton = (ImageButton) findViewById(R.id.upButton);
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override

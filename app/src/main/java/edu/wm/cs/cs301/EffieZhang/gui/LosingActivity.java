@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 /**
  * The LosingActivity class displays a losing message for the user, which includes
@@ -37,6 +38,31 @@ public class LosingActivity extends AppCompatActivity {
                 startActivity(back2Title);
             }
         });
+        setLosingScreenMessages();
+    }
+    /**
+     * This method sets the screen to show the
+     * user's path, the shortest possible path to
+     * solve the maze, and the overall energy
+     * consumption if the maze was not operated manually.
+     */
+    private void setLosingScreenMessages(){
+        TextView shortPath = (TextView) findViewById(R.id.shortestPathLengthTextView);
+        TextView userPath = (TextView) findViewById(R.id.userPathLengthTextView);
+        TextView energyCon = (TextView) findViewById(R.id.energyConsumptionTextView);
+        TextView reason = (TextView) findViewById(R.id.loseReason);
+        int pathLength = DataHolder.getPathlength();
+        int shortestPathLength = DataHolder.getPathlength();
+        int energy = DataHolder.getEnergyConsumption();
+        shortPath.setText("Shortest Possible Path Length: " + shortestPathLength);
+        userPath.setText("Your Path Length: " + pathLength);
+        energyCon.setText("Your Energy Consumption:"+ energy);
+        if(energy >= 3500){
+            reason.setText("Lost Reason: Lack of energy");
+        }
+        else{
+            reason.setText("Lost Reason: Robot is broken");
+        }
     }
     /**
      * This method checks to see if the back button has been pressed, and if

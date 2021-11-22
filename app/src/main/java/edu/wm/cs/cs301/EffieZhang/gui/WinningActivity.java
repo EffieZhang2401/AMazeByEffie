@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import edu.wm.cs.cs301.EffieZhang.R;
 import android.os.Bundle;
 import android.content.Intent;
+import android.widget.TextView;
 import android.view.View;
 import android.util.Log;
 import android.widget.Button;
@@ -37,6 +38,24 @@ public class WinningActivity extends AppCompatActivity {
                 startActivity(back2Title);
             }
         });
+        setWinningScreenMessages();
+    }
+    /**
+     * This method sets the screen to show the
+     * user's path, the shortest possible path to
+     * solve the maze, and the overall energy
+     * consumption if the maze was not operated manually.
+     */
+    private void setWinningScreenMessages(){
+        TextView shortPath = (TextView) findViewById(R.id.shortestPathLengthTextView);
+        TextView userPath = (TextView) findViewById(R.id.userPathLengthTextView);
+        TextView energyCon = (TextView) findViewById(R.id.energyConsumptionTextView);
+        int pathLength = DataHolder.getPathlength();
+        int shortestPathLength = DataHolder.getPathlength();
+        int energy = DataHolder.getEnergyConsumption();
+        shortPath.setText("Shortest Possible Path Length: " + shortestPathLength);
+        userPath.setText("Your Path Length: " + pathLength);
+        energyCon.setText("Your Energy Consumption:"+ energy);
     }
 
     /**

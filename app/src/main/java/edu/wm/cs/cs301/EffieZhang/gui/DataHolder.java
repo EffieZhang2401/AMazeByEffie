@@ -3,9 +3,10 @@ package edu.wm.cs.cs301.EffieZhang.gui;
 import android.app.Application;
 
 /**
- * This dataholder can save the data collected through
- * user's input
- *
+ * This dataholder can save the data collected through user's input
+ * It has the set method and get method to receive and transfer data
+ * It stores the data of mazelevel, driver, robot, algorithm,
+ * hasroom, and pathlength.
  * @author effiezhang
  */
 public class DataHolder extends Application {
@@ -15,7 +16,15 @@ public class DataHolder extends Application {
     private static int pathlength;
     private static String algorithm;
     private static Boolean hasroom;
+    private static int energyConsumption;
 
+    public static void setEnergyConsumption(int energy){
+        energyConsumption = energy;
+    }
+
+    public static int getEnergyConsumption(){
+        return energyConsumption;
+    }
     /**
      * Set the path length to the static int pathlength
      * @param len
