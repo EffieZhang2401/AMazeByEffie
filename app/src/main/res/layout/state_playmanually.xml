@@ -169,18 +169,16 @@
         app:layout_constraintStart_toEndOf="@+id/jumpButton"
         app:srcCompat="@drawable/right" />
 
-    <Button
-        android:id="@+id/ShortCut"
-        android:layout_width="267dp"
-        android:layout_height="262dp"
-        android:layout_marginBottom="30dp"
-        android:text="ShortCut"
-        app:layout_constraintBottom_toTopOf="@id/upButton"
+    <edu.wm.cs.cs301.EffieZhang.gui.MazePanel
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:id="@+id/mazePanelView"
+        android:defaultFocusHighlightEnabled="true"
+        app:layout_constraintBottom_toTopOf="@+id/upButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/solutionText" />
 
-    </Button>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

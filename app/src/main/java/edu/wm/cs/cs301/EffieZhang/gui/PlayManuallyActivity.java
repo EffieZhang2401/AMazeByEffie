@@ -29,6 +29,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
     private int pathlength;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final MazePanel panel = (MazePanel) findViewById(R.id.mazePanelView);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.state_playmanually);
         pathlength = 0;
@@ -66,15 +67,6 @@ public class PlayManuallyActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Jump", Toast.LENGTH_SHORT).show();
                 Log.v("Jump", "Jump");
                 pathlength++;
-            }
-        });
-        Button shortcut = (Button) findViewById(R.id.ShortCut);
-        shortcut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataHolder.setPathlength(pathlength);
-                Intent winning = new Intent(getApplicationContext(), WinningActivity.class);
-                startActivity(winning);
             }
         });
     }
