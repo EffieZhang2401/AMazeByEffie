@@ -13,7 +13,7 @@ import android.util.Log;
 import static android.graphics.Color.rgb;
 import android.view.View;
 
-public class MazePanel extends View{
+public class MazePanel extends View implements P5PanelF21{
     private static final long serialVersionUID = 2787329533730973905L;
     private Color col;
     private static final String TAG = "MazePanel";  //string message
@@ -24,58 +24,75 @@ public class MazePanel extends View{
     private static final int RGB_DEF = 20;
     private static final int RGB_DEF_GREEN = 60;
 
-    // bufferImage can only be initialized if the container is displayable,
-    // uses a delayed initialization and relies on client class to call initBufferImage()
-    // before first use
-    private Image bufferImage;
-    private Graphics2D graphics; // obtained from bufferImage,
-    // graphics is stored to allow clients to draw on the same graphics object repeatedly
-    // has benefits if color settings should be remembered for subsequent drawing operations
+    private Bitmap.Config config; //bitmap configuration settings
+    private Bitmap bitmap;  //bitmap with graphics drawn on it
+    private Canvas canvas;  //canvas to draw images on the bitmap
+    private Paint paint;  //paint being used at the time
+
+    private int color;  //int color that paint is currently set on
+    private static final int greenWM = Color.parseColor("#115740");
+    private static final int goldWM = Color.parseColor("#916f41");
+    private static final int yellowWM = Color.parseColor("#FFFF99");
+    private boolean top = true;  //boolean value that tells if top or bottom background rectangle is being drawn
+    private String markerFont;  //current font of the marker
+    private Paint shaderPaint;
 
     /**
      * Constructor. Object is not focusable.
      */
-    public MazePanel() {
+    public MazePanel(Context context, AttributeSet attrs) {
+        super(context, attrs);
         setFocusable(false);
-        bufferImage = null; // bufferImage initialized separately and later
-        graphics = null;	// same for graphics
-    }
-
-    @Override
-    public void update(Graphics g) {
-        paint(g);
+        config = Bitmap.Config.ARGB_8888;
+        bitmap = Bitmap.createBitmap(Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT, config);
+        canvas = new Canvas(bitmap);
+        paint = new Paint();
+        shaderPaint = new Paint();
     }
 
     /**
-     * Method to draw the buffer image on a graphics object that is
-     * obtained from the superclass.
-     * Warning: do not override getGraphics() or drawing might fail.
+     * This method scales the bitmap so that it fits into the view that is
+     * in playManuallyActivity and PlayAnimationActivity, then paints the
+     * scaled bitmap onto the canvas of the view that was passed in
+     * @param canvas
      */
-    public void update() {
-        paint(getGraphics());
+    @Override
+    public void onDraw(Canvas canvas){
+        super.onDraw(canvas);
+        canvas.drawColor(Color.WHITE);
+        //addBackground(3);
+        Bitmap myBitmap = Bitmap.createScaledBitmap(bitmap, 1050, 1050, true);
+        canvas.drawBitmap(myBitmap, 0, 0, paint);
     }
 
+    public void update(Canvas c){
+        paint(c);
+    }
+
+    public void update(){
+        paint(canvas);
+    }
     /**
      * Draws the buffer image to the given graphics object.
      * This method is called when this panel should redraw itself.
      * The given graphics object is the one that actually shows
      * on the screen.
      */
-    @Override
-    public void paint(Graphics g) {
-        if (null == g) {
+    public void paint(Canvas canvas) {
+        if (null == canvas) {
             System.out.println("MazePanel.paint: no graphics object, skipping drawImage operation");
+            Log.v("MazePanel.paint", "no graphics object, skipping drawImage operation");
         }
         else {
-            g.drawImage(bufferImage,0,0,null);
+            canvas.drawBitmap(bitmap,0,0,null);
         }
     }
 
     /**
-     * Obtains a graphics object that can be used for drawing.
-     * This MazePanel object internally stores the graphics object
+     * Obtains a canvas object that can be used for drawing.
+     * This MazePanel object internally stores the canvas object
      * and will return the same graphics object over multiple method calls.
-     * The graphics object acts like a notepad where all clients draw
+     * The canvas object acts like a notepad where all clients draw
      * on to store their contribution to the overall image that is to be
      * delivered later.
      * To make the drawing visible on screen, one needs to trigger
@@ -83,42 +100,36 @@ public class MazePanel extends View{
      * when calling the update method.
      * @return graphics object to draw on, null if impossible to obtain image
      */
-    public Graphics getBufferGraphics() {
+    public Canvas getBufferGraphics() {
         // if necessary instantiate and store a graphics object for later use
-        if (null == graphics) {
-            if (null == bufferImage) {
-                bufferImage = createImage(Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT);
-                if (null == bufferImage)
+        if (null == canvas) {
+            if (null == canvas) {
+                config = Bitmap.Config.ARGB_8888;
+                bitmap = Bitmap.createBitmap(Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT, config);
+                if (null == bitmap)
                 {
                     System.out.println("Error: creation of buffered image failed, presumedly container not displayable");
                     return null; // still no buffer image, give up
                 }
             }
-            graphics = (Graphics2D) bufferImage.getGraphics();
-            if (null == graphics) {
+            canvas = new Canvas(bitmap);
+            if (null == canvas) {
                 System.out.println("Error: creation of graphics for buffered image failed, presumedly container not displayable");
             }
-            else {
-                // System.out.println("MazePanel: Using Rendering Hint");
-                // For drawing in FirstPersonDrawer, setting rendering hint
-                // became necessary when lines of polygons
-                // that were not horizontal or vertical looked ragged
-                setRenderingHint(P5RenderingHints.KEY_ANTIALIASING,
-                        P5RenderingHints.VALUE_ANTIALIAS_ON);
-                setRenderingHint(P5RenderingHints.KEY_INTERPOLATION,
-                        P5RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            else{
+                Log.v("MazePanel", "Using Rendering Hint");
             }
         }
-        return graphics;
+        return canvas;
     }
 
     /**
      * Commits all accumulated drawings to the UI.
      * Substitute for MazePanel.update method.
      */
-    @Override
     public void commit() {
-        paint(getGraphics());
+        Log.v(TAG, "Updating maze panel");
+        invalidate();
 
     }
 
@@ -129,134 +140,40 @@ public class MazePanel extends View{
      * Substitute for code that checks if graphics object for drawing is not null.
      * @return true if drawing is possible, false if not.
      */
-    @Override
     public boolean isOperational() {
-        if(graphics == null) {
-            return false;
+        if(canvas != null) {
+            return true;
         }
-        return true;
+        return false;
     }
 
 
     /**
      * @param rgb value of color
      */
-    @Override
     public void setColor(int rgb) {
-        col = new Color(rgb);
-        graphics.setColor(col);
+        paint.setColor(rgb);
+        color = rgb;
+
     }
 
-    /**
-     * sets Color with rgba value
-     * @param r
-     * @param g
-     * @param b
-     * @param a
-     */
-    public void setColor(float[] rgba) {
-        col = new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
-        graphics.setColor(col);
-    }
 
     /**
      * @return rgb value of color
      */
-    @Override
     public int getColor() {
-        return col.getRGB();
+        return color;
     }
 
     /**
-     * @param color to be decoded
-     * @return rgb value of decoded color
+     * Sets the marker font to the
+     * value passed in and repaints the
+     * compass rose with that font
+     * @param fontName name of font
      */
-    public static int getColor(String decode) {
-        return Color.decode(decode).getRGB();
-    }
-
-    //enum some commoncolors
-    public enum CommonColors {
-        WHITE,
-        GRAY,
-        BLACK,
-        RED,
-        YELLOW
-    }
-    /**
-     * @param enumerated color
-     * @return
-     */
-    public static int getColor(CommonColors color) {
-        switch (color) {
-            case WHITE:
-                return Color.white.getRGB();
-            case GRAY:
-                return Color.gray.getRGB();
-            case BLACK:
-                return Color.black.getRGB();
-            case RED:
-                return Color.red.getRGB();
-            case YELLOW:
-                return Color.yellow.getRGB();
-        }
-        return 0;
-    }
-
-    /**
-     *
-     * @param fontCode
-     * @return font name
-     */
-    public static String getFontName(String fontCode) {
-        return Font.decode(fontCode).getFontName();
-    }
-
-    /**
-     *
-     * @param fontCode
-     * @return font style int
-     */
-    public static int getFontStyle(String fontCode) {
-        return Font.decode(fontCode).getStyle();
-    }
-
-    /**
-     *
-     * @param fontCode
-     * @return font size
-     */
-    public static int getFontSize(String fontCode) {
-        return Font.decode(fontCode).getSize();
-    }
-
-    // private Font fields
-    private String fontName;
-    private int fontStyle;
-    private int fontSize;
-
-    /**
-     * set the font by name of the font
-     * @param String fn
-     */
-    public void setFontName(String fn) {
-        fontName = fn;
-    }
-
-    /**
-     * set the font by int of the style
-     * @param fstyle
-     */
-    public void setFontStyle(int fstyle) {
-        fontStyle = fstyle;
-    }
-
-    /**
-     * set the font's size
-     * @param fsize
-     */
-    public void setFontSize(int fsize) {
-        fontSize = fsize;
+    public void setFont(String fontName) {
+        markerFont = fontName;
+        paint.setFontFeatureSettings(fontName);
     }
 
     /**
@@ -266,34 +183,38 @@ public class MazePanel extends View{
      * @param int extensionX
      * @return
      */
-    public int getWallColor(final int d, final int cc, int rgbValue) {
+    public int getWallColor(final int d, final int cc, int extentionX) {
         // compute rgb value, depends on distance and x direction
-        final int distance = d/4;
-        Color col;
-        switch (((distance >> 3) ^ cc) % 6) {
+        final int distance = d / 4;
+        // mod used to limit the number of colors to 6
+        final int part1 = distance & 7;
+        final int add = (extentionX != 0) ? 1 : 0;
+        final int rgbValue = ((part1 + 2 + add) * 70) / 8 + 80;
+        int wallColor = 0;
+        switch (((d >> 3) ^ cc) % 6) {
             case 0:
-                col = new Color(rgbValue, RGB_DEF, RGB_DEF);
+                wallColor = rgb(rgbValue, RGB_DEF, RGB_DEF);
                 break;
             case 1:
-                col = new Color(RGB_DEF, RGB_DEF_GREEN, RGB_DEF);
+                wallColor = rgb(RGB_DEF, RGB_DEF_GREEN, RGB_DEF);
                 break;
             case 2:
-                col = new Color(RGB_DEF, RGB_DEF, rgbValue);
+                wallColor = rgb(RGB_DEF, RGB_DEF, rgbValue);
                 break;
             case 3:
-                col = new Color(rgbValue, RGB_DEF_GREEN, RGB_DEF);
+                wallColor = rgb(rgbValue, RGB_DEF_GREEN, RGB_DEF);
                 break;
             case 4:
-                col = new Color(RGB_DEF, RGB_DEF_GREEN, rgbValue);
+                wallColor = rgb(RGB_DEF, RGB_DEF_GREEN, rgbValue);
                 break;
             case 5:
-                col = new Color(rgbValue, RGB_DEF, rgbValue);
+                wallColor = rgb(rgbValue, RGB_DEF, rgbValue);
                 break;
             default:
-                col = new Color(RGB_DEF, RGB_DEF, RGB_DEF);
+                wallColor = rgb(RGB_DEF, RGB_DEF, RGB_DEF);
                 break;
         }
-        return col.getRGB();
+        return wallColor;
     }
 
     /**
@@ -303,22 +224,20 @@ public class MazePanel extends View{
      * @param weight0 of c0
      * @return blend of colors c0 and c1 as weighted average
      */
-    private Color blend(Color c0, Color c1, double weight0) {
+    private int blend(Color c0, Color c1, double weight0) {
         if (weight0 < 0.1)
-            return c1;
+            return c1.toArgb();
         if (weight0 > 0.95)
-            return c0;
-        double r = weight0 * c0.getRed() + (1-weight0) * c1.getRed();
-        double g = weight0 * c0.getGreen() + (1-weight0) * c1.getGreen();
-        double b = weight0 * c0.getBlue() + (1-weight0) * c1.getBlue();
-        double a = Math.max(c0.getAlpha(), c1.getAlpha());
+            return c0.toArgb();
+        double r = weight0 * c0.red() + (1-weight0) * c1.red();
+        double g = weight0 * c0.green() + (1-weight0) * c1.green();
+        double b = weight0 * c0.blue() + (1-weight0) * c1.blue();
+        double a = Math.max(c0.alpha(), c1.alpha());
 
-        return new Color((int) r, (int) g, (int) b, (int) a);
+        return Color.valueOf((int) r, (int) g, (int) b, (int) a).toArgb();
     }
 
-    final Color greenWM = Color.decode("#115740");
-    final Color goldWM = Color.decode("#916f41");
-    final Color yellowWM = Color.decode("#FFFF99");
+
     /**
      * Determine the background color for the top and bottom
      * rectangle as a blend between starting color settings
@@ -328,9 +247,9 @@ public class MazePanel extends View{
      * @param top is true for the top triangle, false for the bottom
      * @return the color to use for the background rectangle
      */
-    private Color getBackgroundColor(float percentToExit, boolean top) {
-        return top? blend(yellowWM, goldWM, percentToExit) :
-                blend(Color.lightGray, greenWM, percentToExit);
+    private int getBackgroundColor(float percentToExit, boolean top) {
+        return top? blend(Color.valueOf(yellowWM), Color.valueOf(goldWM), percentToExit) :
+                blend(Color.valueOf(Color.LTGRAY), Color.valueOf(greenWM), percentToExit);
     }
 
     /**
@@ -345,11 +264,11 @@ public class MazePanel extends View{
     @Override
     public void addBackground(float percentToExit) {
         // black rectangle in upper half of screen
-        graphics.setColor(getBackgroundColor(percentToExit, true));
-        graphics.fillRect(0, 0, Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT/2);
+        //graphics.setColor(getBackgroundColor(percentToExit, true));
+        //graphics.fillRect(0, 0, Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT/2);
         // grey rectangle in lower half of screen
-        graphics.setColor(getBackgroundColor(percentToExit, false));
-        graphics.fillRect(0, Constants.VIEW_HEIGHT/2, Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT/2);
+        //graphics.setColor(getBackgroundColor(percentToExit, false));
+        //graphics.fillRect(0, Constants.VIEW_HEIGHT/2, Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT/2);
 
     }
 
@@ -366,7 +285,8 @@ public class MazePanel extends View{
      */
     @Override
     public void addFilledRectangle(int x, int y, int width, int height) {
-        graphics.fillRect(x, y, width, height);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawRect(x, y, x + width, y + height, paint);
 
     }
 
@@ -386,13 +306,31 @@ public class MazePanel extends View{
      */
     @Override
     public void addFilledPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-        graphics.fillPolygon(xPoints, yPoints, nPoints);
+        paint.setStyle(Paint.Style.FILL);
+        Path path = new Path();
+        path.reset();
+        if(xPoints != null & yPoints != null){
+            path.moveTo(xPoints[0], yPoints[0]);
+            for(int i = 1; i < nPoints; i++){
+                path.lineTo(xPoints[i], yPoints[i]);
+            }
+            canvas.drawPath(path, paint);
+        }
 
     }
 
     @Override
     public void addPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-        graphics.drawPolygon(xPoints, yPoints, nPoints);
+        paint.setStyle(Paint.Style.STROKE);
+        Path path = new Path();
+        path.reset();
+        if(xPoints != null & yPoints != null){
+            path.moveTo(xPoints[0], yPoints[0]);
+            for(int i = 1; i < nPoints; i++){
+                path.lineTo(xPoints[i], yPoints[i]);
+            }
+            canvas.drawPath(path, paint);
+        }
 
     }
 
@@ -407,8 +345,8 @@ public class MazePanel extends View{
      * @param endY is the y-coordinate of the end point
      */
     @Override
-    public void addLine(int startX, int startY, int endX, int endY) {
-        graphics.drawLine(startX, startY, endX, endY);
+    public void addLine(float startX, float startY, float endX, float endY) {
+        canvas.drawLine(startX, startY, endX, endY, paint);
     }
 
     /**
@@ -424,8 +362,9 @@ public class MazePanel extends View{
      * @param height is the height of the oval
      */
     @Override
-    public void addFilledOval(int x, int y, int width, int height) {
-        graphics.fillOval(x, y, width, height);
+    public void addFilledOval(float left, float top, float right, float bottom) {
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawOval(left, top, right, bottom, paint);
 
     }
 
@@ -455,8 +394,8 @@ public class MazePanel extends View{
      * @param arcAngle the angular extent of the arc, relative to the start angle.
      */
     @Override
-    public void addArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        graphics.drawArc(x, y, width, height, startAngle, arcAngle);
+    public void addArc(float left, float top, float right, float bottom, float startAngle, float sweepAngle) {
+        canvas.drawArc(left, top, right, bottom, startAngle, sweepAngle, true, paint);
     }
 
     /**
@@ -468,14 +407,7 @@ public class MazePanel extends View{
      */
     @Override
     public void addMarker(float x, float y, String str) {
-        Font f = new Font(fontName, fontStyle, fontSize);
-        GlyphVector gv = f.createGlyphVector(graphics.getFontRenderContext(), str);
-        Rectangle2D rect = gv.getVisualBounds();
-
-        x -= rect.getWidth() / 2;
-        y += rect.getHeight() / 2;
-
-        graphics.drawGlyphVector(gv, x, y);
+        canvas.drawText(str, x, y, paint);
     }
 
     /**
@@ -490,43 +422,43 @@ public class MazePanel extends View{
      */
     @Override
     public void setRenderingHint(P5RenderingHints hintKey, P5RenderingHints hintValue) {
-        switch (hintKey) {
-            case KEY_RENDERING:
-                if (hintValue == P5RenderingHints.VALUE_ANTIALIAS_ON) {
-                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                }
-                else if (hintValue == P5RenderingHints.VALUE_INTERPOLATION_BILINEAR) {
-                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                }
-                else {
-                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
-                }
-                break;
-            case KEY_INTERPOLATION:
-                if (hintValue == P5RenderingHints.VALUE_ANTIALIAS_ON) {
-                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                }
-                else if (hintValue == P5RenderingHints.VALUE_INTERPOLATION_BILINEAR) {
-                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                }
-                else {
-                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
-                }
-                break;
-            case KEY_ANTIALIASING:
-                if (hintValue == P5RenderingHints.VALUE_ANTIALIAS_ON) {
-                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
-                }
-                else if (hintValue == P5RenderingHints.VALUE_INTERPOLATION_BILINEAR) {
-                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-                }
-                else {
-                    graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
-                }
-                break;
-            default:
-                break;
-        }
+        //switch (hintKey) {
+            //case KEY_RENDERING:
+                //if (hintValue == P5RenderingHints.VALUE_ANTIALIAS_ON) {
+                    //graphics.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                //}
+                //else if (hintValue == P5RenderingHints.VALUE_INTERPOLATION_BILINEAR) {
+                    //graphics.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                //}
+                //else {
+                    //graphics.setRenderingHint(java.awt.RenderingHints.KEY_RENDERING, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
+                //}
+                //break;
+            //case KEY_INTERPOLATION:
+                //if (hintValue == P5RenderingHints.VALUE_ANTIALIAS_ON) {
+                    //graphics.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                //}
+                //else if (hintValue == P5RenderingHints.VALUE_INTERPOLATION_BILINEAR) {
+                    //graphics.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                //}
+                //else {
+                    //graphics.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
+                //}
+                //break;
+            //case KEY_ANTIALIASING:
+                //if (hintValue == P5RenderingHints.VALUE_ANTIALIAS_ON) {
+                    //graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON);
+                //}
+                //else if (hintValue == P5RenderingHints.VALUE_INTERPOLATION_BILINEAR) {
+                    //graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                //}
+                //else {
+                    //graphics.setRenderingHint(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_RENDER_QUALITY);
+                //}
+                //break;
+            //default:
+                //break;
+        //}
 
     }
 }
