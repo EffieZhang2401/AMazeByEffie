@@ -1,42 +1,44 @@
 package edu.wm.cs.cs301.EffieZhang.gui;
-
+/**
+ * Provides an adapter for a graphics object for the first person view
+ * and the map view to draw on.
+ * Any implementing class encapsulates and hides its dependency on AWT.
+ * To its clients it offers the notion of an editor:
+ * one can clear it by adding the background,
+ * then put graphical entities to draw into it,
+ * and finally commit the complete drawing to the UI.
+ * The naming is technical as it is for Project 5
+ * and should serve as a specification for the MazePanel class.
+ *
+ * Note that methods for drawX in awt have a corresponding
+ * method addX with same parameters here. The naming emphasizes
+ * that the P5Panel accumulates bits and pieces for an
+ * overall drawing that is then shown on the screen
+ * when the editor's content is complete and committed
+ * for drawing.
+ *
+ * The documentation includes guidance which AWT method is encapsulated
+ * or can be substituted by which interface method.
+ *
+ * @author Peter Kemper
+ *
+ */
 public interface P5PanelF21 {
-    /**
-     * Provides an adapter for a graphics object for the first person view
-     * and the map view to draw on.
-     * Any implementing class encapsulates and hides its dependency on AWT.
-     * To its clients it offers the notion of an editor:
-     * one can clear it by adding the background,
-     * then put graphical entities to draw into it,
-     * and finally commit the complete drawing to the UI.
-     * The naming is technical as it is for Project 5
-     * and should serve as a specification for the MazePanel class.
-     *
-     * Note that methods for drawX in awt have a corresponding
-     * method addX with same parameters here. The naming emphasizes
-     * that the P5Panel accumulates bits and pieces for an
-     * overall drawing that is then shown on the screen
-     * when the editor's content is complete and committed
-     * for drawing.
-     *
-     * The documentation includes guidance which AWT method is encapsulated
-     * or can be substituted by which interface method.
-     *
-     * @author Peter Kemper
-     *
-     */
+        // TODO FOR P5:
+        // Add code to the following static method that will help you with Wall.java
+        //
         /**
          * Determines the color for a wall.
          * Supports color determination for the Wall.initColor method.
          * See also https://www.geeksforgeeks.org/static-method-in-interface-in-java/
          * @param distance is the distance to the exit
          * @param cc is an obscure parameter used in Wall for color determination, just passed in here
-         * @param extensionX is the wall's length and direction (sign), horizontal dimension
+         * @param rgbValue is the wall's length and direction (sign), horizontal dimension
          * @return the rgb value for the color of the wall
          */
         public static int getWallColor(int distance, int cc, int rgbValue) {
-            // YOUR CODE IS MISSING HERE
-            return 0; // THIS IS JUST TO MAKE THE COMPILER HAPPY YOU NEED TO FIX THIS
+                // YOUR CODE IS MISSING HERE
+                return 0; // THIS IS JUST TO MAKE THE COMPILER HAPPY YOU NEED TO FIX THIS
         };
 
 
@@ -138,7 +140,7 @@ public interface P5PanelF21 {
          * @param endX is the x-coordinate of the end point
          * @param endY is the y-coordinate of the end point
          */
-        public void addLine(float startX, float startY, float endX, float endY);
+        public void addLine(int startX, int startY, int endX, int endY);
 
         /**
          * Adds a filled oval.
@@ -152,7 +154,7 @@ public interface P5PanelF21 {
          * @param width is the width of the oval
          * @param height is the height of the oval
          */
-        public void addFilledOval(float x, float y, float width, float height);
+        public void addFilledOval(int x, int y, int width, int height);
         /**
          * Adds the outline of a circular or elliptical arc covering the specified rectangle.
          * The resulting arc begins at startAngle and extends for arcAngle degrees,
@@ -178,7 +180,7 @@ public interface P5PanelF21 {
          * @param startAngle the beginning angle.
          * @param arcAngle the angular extent of the arc, relative to the start angle.
          */
-        public void addArc(float x, float y, float width, float height, float startAngle, float arcAngle) ;
+        public void addArc(int x, int y, int width, int height, int startAngle, int arcAngle) ;
         /**
          * Adds a string at the given position.
          * Substitute for CompassRose.drawMarker method

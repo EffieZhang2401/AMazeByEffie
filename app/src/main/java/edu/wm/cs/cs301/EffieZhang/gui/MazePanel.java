@@ -51,6 +51,32 @@ public class MazePanel extends View implements P5PanelF21{
     }
 
     /**
+     * This method tests to make sure that the different drawing properties of
+     * MazePanel work in android studio by drawing practice lines and shapes
+     *
+     * it is only used for testing purposes
+     */
+    private void myTestImage(Canvas c){
+        getBufferGraphics();
+        setColor(Color.RED);
+        addFilledOval(0, 20, 150, 150);
+        setColor(Color.GREEN);
+        addFilledOval(0, 10, 60, 60);
+        setColor(Color.YELLOW);
+        addFilledRectangle(200, 200, 100, 49);
+        setColor(Color.BLUE);
+        int[] x = new int[]{0, 50, 30};
+        int[] y = new int[]{200, 200, 400};
+        addFilledPolygon(x, y, 3);
+        addLine(100, 0, 200, 200);
+        addArc(200, 200, 100, 100, 30, 50);
+        setColor(Color.BLACK);
+        int[] x2 = new int[]{60, 100, 80};
+        int[] y2 = new int[]{80, 80, 70};
+        addPolygon(x2, y2, 3);
+    }
+
+    /**
      * This method scales the bitmap so that it fits into the view that is
      * in playManuallyActivity and PlayAnimationActivity, then paints the
      * scaled bitmap onto the canvas of the view that was passed in
@@ -58,9 +84,9 @@ public class MazePanel extends View implements P5PanelF21{
      */
     @Override
     public void onDraw(Canvas canvas){
+        myTestImage(canvas);
         super.onDraw(canvas);
         canvas.drawColor(Color.WHITE);
-        //addBackground(3);
         Bitmap myBitmap = Bitmap.createScaledBitmap(bitmap, 1050, 1050, true);
         canvas.drawBitmap(myBitmap, 0, 0, paint);
     }
@@ -178,17 +204,17 @@ public class MazePanel extends View implements P5PanelF21{
 
     /**
      * Return the wall color in int
-     * @param int distance
-     * @param int cc
-     * @param int extensionX
+     * @param d
+     * @param cc
+     * @param extensionX
      * @return
      */
-    public int getWallColor(final int d, final int cc, int extentionX) {
+    public int getWallColor(final int d, final int cc, int extensionX) {
         // compute rgb value, depends on distance and x direction
         final int distance = d / 4;
         // mod used to limit the number of colors to 6
         final int part1 = distance & 7;
-        final int add = (extentionX != 0) ? 1 : 0;
+        final int add = (extensionX != 0) ? 1 : 0;
         final int rgbValue = ((part1 + 2 + add) * 70) / 8 + 80;
         int wallColor = 0;
         switch (((d >> 3) ^ cc) % 6) {
@@ -285,9 +311,10 @@ public class MazePanel extends View implements P5PanelF21{
      */
     @Override
     public void addFilledRectangle(int x, int y, int width, int height) {
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawRect(x, y, x + width, y + height, paint);
-
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        float right = x + width;
+        float bottom = y + height;
+        canvas.drawRect((float) x, (float) y, right, bottom, paint);
     }
 
     /**
@@ -306,14 +333,15 @@ public class MazePanel extends View implements P5PanelF21{
      */
     @Override
     public void addFilledPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-        paint.setStyle(Paint.Style.FILL);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
         Path path = new Path();
         path.reset();
         if(xPoints != null & yPoints != null){
             path.moveTo(xPoints[0], yPoints[0]);
             for(int i = 1; i < nPoints; i++){
-                path.lineTo(xPoints[i], yPoints[i]);
+                path.lineTo((float)xPoints[i], (float)yPoints[i]);
             }
+            path.close();
             canvas.drawPath(path, paint);
         }
 
@@ -327,8 +355,9 @@ public class MazePanel extends View implements P5PanelF21{
         if(xPoints != null & yPoints != null){
             path.moveTo(xPoints[0], yPoints[0]);
             for(int i = 1; i < nPoints; i++){
-                path.lineTo(xPoints[i], yPoints[i]);
+                path.lineTo((float)xPoints[i], (float)yPoints[i]);
             }
+            path.close();
             canvas.drawPath(path, paint);
         }
 
@@ -345,8 +374,11 @@ public class MazePanel extends View implements P5PanelF21{
      * @param endY is the y-coordinate of the end point
      */
     @Override
-    public void addLine(float startX, float startY, float endX, float endY) {
-        canvas.drawLine(startX, startY, endX, endY, paint);
+    public void addLine(int startX, int startY, int endX, int endY) {
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(5);
+        canvas.drawLine((float)startX, (float)startY, (float)endX, (float)endY,paint);
+
     }
 
     /**
@@ -362,9 +394,11 @@ public class MazePanel extends View implements P5PanelF21{
      * @param height is the height of the oval
      */
     @Override
-    public void addFilledOval(float left, float top, float right, float bottom) {
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawOval(left, top, right, bottom, paint);
+    public void addFilledOval(int x, int y, int width, int height) {
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        float right = width + x;
+        float bottom = height + y;
+        canvas.drawOval((float) x, (float) y, right, bottom, paint);
 
     }
 
@@ -394,8 +428,11 @@ public class MazePanel extends View implements P5PanelF21{
      * @param arcAngle the angular extent of the arc, relative to the start angle.
      */
     @Override
-    public void addArc(float left, float top, float right, float bottom, float startAngle, float sweepAngle) {
-        canvas.drawArc(left, top, right, bottom, startAngle, sweepAngle, true, paint);
+    public void addArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
+        paint.setStyle(Paint.Style.STROKE);
+        float right = x + width;
+        float bottom = y + height;
+        canvas.drawArc((float)x, (float) y, right, bottom, (float)startAngle, (float)arcAngle, false, paint);
     }
 
     /**
