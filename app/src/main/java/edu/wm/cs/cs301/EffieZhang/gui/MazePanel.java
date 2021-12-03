@@ -183,6 +183,16 @@ public class MazePanel extends View implements P5PanelF21{
 
     }
 
+    /**
+     * Takes the hex string value of a color
+     * and returns that color's int value
+     *
+     * @param str string of a color
+     * @return int value of the color passed in
+     */
+    public static int decodeColor(String str) {
+        return Color.parseColor(str);
+    }
 
     /**
      * @return rgb value of color
@@ -445,6 +455,20 @@ public class MazePanel extends View implements P5PanelF21{
     @Override
     public void addMarker(float x, float y, String str) {
         canvas.drawText(str, x, y, paint);
+    }
+
+    /**
+     * Takes the float values of a color and
+     * returns that color's int value
+     *
+     * @param r value of the red value of the color
+     * @param g value of the green value of the color
+     * @param b value of the blue value of the color
+     * @param a value of the alpha value of the color
+     * @return int value of the color passed in
+     */
+    public static int createNewColor(float r, float g, float b, float a) {
+        return Color.valueOf(r, g, b, a).toArgb();
     }
 
     /**
