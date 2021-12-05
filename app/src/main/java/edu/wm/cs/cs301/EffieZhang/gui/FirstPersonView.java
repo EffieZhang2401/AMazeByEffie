@@ -170,7 +170,8 @@ public class FirstPersonView {
         setView(x, y, walkStep);
         // update graphics
         // draw background figure: lightGrey to green on bottom half, yellow to gold on top half
-        panel.addBackground(percentToExit);
+        //panel.addBackground(percentToExit);
+		drawBackground(panel,percentToExit);
         // set color to white and draw what ever can be seen from the current position
         panel.setColor(Color.WHITE);
         // reset the set of ranges to a single new element (0,width-1)
@@ -188,6 +189,28 @@ public class FirstPersonView {
 
 
 	////////////////////////////// internal, private methods ///////////////////////////////
+	/**
+	 * Draws two solid rectangles to provide a background.
+	 * Note that this also erases previous drawings of maze or map.
+	 * The color setting adjusts to the distance to the exit to
+	 * provide an additional clue for the user.
+	 * Colors transition from black to gold and from grey to green.
+	 * @param panel to draw on, must be not null
+	 * @param percentToExit gives the distance to exit
+	 */
+	private void drawBackground(MazePanel panel, float percentToExit) {
+		// black rectangle in upper half of screen
+		// graphics.setColor(Color.black);
+		// dynamic color setting:
+		panel.addBackground(percentToExit);
+		panel.addFilledRectangle(0, 0, viewWidth, viewHeight/2);
+		// grey rectangle in lower half of screen
+		// graphics.setColor(Color.darkGray);
+		// dynamic color setting:
+		panel.addBackground(percentToExit);
+		panel.addFilledRectangle(0, viewHeight/2, viewWidth, viewHeight/2);
+	}
+
 	private int getViewDX(int angle) {
 		return (int) (Math.cos(radify(angle))*(1<<16));
 	}

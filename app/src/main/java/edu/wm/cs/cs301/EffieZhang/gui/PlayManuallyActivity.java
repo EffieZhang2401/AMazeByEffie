@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -26,11 +27,12 @@ import edu.wm.cs.cs301.EffieZhang.R;
  */
 public class PlayManuallyActivity extends AppCompatActivity {
     private ToggleButton hasWall, showMap, solution;
+    private static final String TAG = "Move";  //message string
     private static final int MAX_MAP_SIZE = 80;  //max size that the map can be
     private static final int MIN_MAP_SIZE = 1;  //min size that the map can be
     private int pathLength = 0;  //length of the path the user has taken
     private int mapSize = 15;  //default map size
-    private int shortestPathLength = 0;  //shortest possible path length, temp value
+    protected static int shortestPathLength = 0;  //shortest possible path length, temp value
     private Button buttonSubmit;
     private int pathlength;
     private MazePanel panel;  // panel used to draw maze
@@ -44,8 +46,9 @@ public class PlayManuallyActivity extends AppCompatActivity {
         statePlaying = new StatePlaying();
         statePlaying.setPlayManuallyActivity(this);
         statePlaying.start(panel);
-        setSizeOfMap();
         pathlength = 0;
+        int[] startPos = GeneratingActivity.mazeConfig.getStartingPosition();
+        shortestPathLength = GeneratingActivity.mazeConfig.getDistanceToExit(startPos[0], startPos[1])-1;
         ImageButton upButton = (ImageButton) findViewById(R.id.upButton);
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,12 +89,36 @@ public class PlayManuallyActivity extends AppCompatActivity {
                 pathlength++;
             }
         });
-    }
-    /**
-     * This method sets the size of the map to the
-     * size requested by the user.
-     */
-    private void setSizeOfMap(){
+
+        ToggleButton showMap = (ToggleButton) findViewById(R.id.showMapToggle);
+        showMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                statePlaying.keyDown(Constants.UserInput.TOGGLELOCALMAP, 1);
+                Log.v(TAG, "Showing Map: On");
+            }
+        });
+
+
+        ToggleButton showSolution = (ToggleButton) findViewById(R.id.solutionToggle);
+        showSolution.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                statePlaying.keyDown(Constants.UserInput.TOGGLESOLUTION, 1);
+                Log.v(TAG, "Showing Solution: On");
+            }
+        });
+
+
+        ToggleButton showVisibleWall = (ToggleButton) findViewById(R.id.wallToggle);
+        showVisibleWall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                statePlaying.keyDown(Constants.UserInput.TOGGLEFULLMAP, 1);
+                Log.v(TAG, "Showing Visible Wall: On");
+            }
+        });
+
         final SeekBar mapSize1 = (SeekBar) findViewById(R.id.mapSizeSeekBar);
         //final TextView skillLevelText = (TextView) findViewById(R.id.skillLevelTextView);
         mapSize1.setMin(MIN_MAP_SIZE);
@@ -125,6 +152,23 @@ public class PlayManuallyActivity extends AppCompatActivity {
         statePlaying.setMapScale(mapSize);
         //Log.v("Map Size: " + mapSize);
     }
+
+    /**
+     * This method makes the app switch to
+     * the WinningActivity state
+     * @param view of the short cut button
+     */
+    public void sendWinningMessage(View view){
+        DataHolder.setPathlength(pathlength);
+        Intent intent = new Intent(this, WinningActivity.class);
+        //Bundle bundle = getIntent().getExtras();
+        //bundle.putInt("Path Length", pathLength);
+        //bundle.putInt("Shortest Path Length", shortestPathLength);
+        //intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+
     @Override
     public void onBackPressed(){
         Intent back2Title = new Intent(getApplicationContext(), AMazeActivity.class);

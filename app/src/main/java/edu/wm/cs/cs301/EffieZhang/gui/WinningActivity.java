@@ -50,7 +50,7 @@ public class WinningActivity extends AppCompatActivity {
         TextView userPath = (TextView) findViewById(R.id.userPathLengthTextView);
         TextView energyCon = (TextView) findViewById(R.id.energyConsumptionTextView);
         int pathLength = DataHolder.getPathlength();
-        int shortestPathLength = DataHolder.getPathlength();
+        int shortestPathLength = PlayManuallyActivity.shortestPathLength;
         int energy = DataHolder.getEnergyConsumption();
         shortPath.setText("Shortest Possible Path Length: " + shortestPathLength);
         userPath.setText("Your Path Length: " + pathLength);

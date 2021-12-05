@@ -276,15 +276,16 @@ public class MazePanel extends View implements P5PanelF21{
      */
     private int blend(Color c0, Color c1, double weight0) {
         if (weight0 < 0.1)
-            return c1.toArgb();
+            return Color.argb((float) c1.alpha(), c1.red(), c1.green(), c1.blue());
+//            return ((((int) c0.red()) * 65536) + (((int) c0.green()) * 256) + (int) c0.blue());
         if (weight0 > 0.95)
-            return c0.toArgb();
+            return Color.argb((float) c0.alpha(), c0.red(), c0.green(), c0.blue());
+//            return ((((int) c1.red()) * 65536) + (((int) c1.green()) * 256) + (int) c1.blue());
+        double a = Math.max(c0.alpha(), c1.alpha());
         double r = weight0 * c0.red() + (1-weight0) * c1.red();
         double g = weight0 * c0.green() + (1-weight0) * c1.green();
         double b = weight0 * c0.blue() + (1-weight0) * c1.blue();
-        double a = Math.max(c0.alpha(), c1.alpha());
-
-        return Color.valueOf((int) r, (int) g, (int) b, (int) a).toArgb();
+        return Color.argb((float)a, (float)r, (float)g, (float)b);
     }
 
 
@@ -299,7 +300,8 @@ public class MazePanel extends View implements P5PanelF21{
      */
     private int getBackgroundColor(float percentToExit, boolean top) {
         return top? blend(Color.valueOf(lightPink), Color.valueOf(Pink), percentToExit) :
-                blend(Color.valueOf(lightPink), Color.valueOf(Pink), percentToExit);
+                blend(Color.valueOf(Color.LTGRAY), Color.valueOf(greenWM), percentToExit);
+
     }
 
     /**
@@ -313,15 +315,15 @@ public class MazePanel extends View implements P5PanelF21{
      */
     @Override
     public void addBackground(float percentToExit) {
-        //paint.setColor(getBackgroundColor(percentToExit, top));
-        //if(!top){
-            //paint.setColor(ContextCompat.getColor(getContext(), R.color.pink));
-        //}
+        paint.setColor(getBackgroundColor(percentToExit, top));
+        if(!top){
+            paint.setColor(ContextCompat.getColor(getContext(), R.color.pink));
+        }
         //top = !top;
-        setColor(getBackgroundColor(percentToExit, true));
-        addFilledRectangle(0, 0, 1050, (3 * 1050)/5);
-        setColor(getBackgroundColor(percentToExit, false));
-        addFilledRectangle(0, (3 * 1050)/5, 1050, 1050/2);
+        //setColor(getBackgroundColor(percentToExit, true));
+        //addFilledRectangle(0, 0, 1050, (3 * 1050)/5);
+        //setColor(getBackgroundColor(percentToExit, false));
+        //addFilledRectangle(0, (3 * 1050)/5, 1050, 1050/2);
 
     }
 

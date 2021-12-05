@@ -174,7 +174,7 @@ public class StatePlaying{
                 if (isOutside(px,py)) {
                     //control.switchFromPlayingToWinning(0);
                     if(playManually){
-                        //playManuallyActivity.sendWinningMessage(panel);
+                        playManuallyActivity.sendWinningMessage(panel);
                     }
                     else{
                         //playAnimationActivity.sendWinningMessage(panel);
@@ -195,7 +195,7 @@ public class StatePlaying{
                 if (isOutside(px,py)) {
                     //control.switchFromPlayingToWinning(0);
                     if(playManually){
-                        //playManuallyActivity.sendWinningMessage(panel);
+                        playManuallyActivity.sendWinningMessage(panel);
                     }
                     else{
                         //playAnimationActivity.sendWinningMessage(panel);
