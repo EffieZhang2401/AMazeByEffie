@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="329dp"
-        android:layout_marginBottom="17dp"
+        android:layout_marginBottom="10dp"
         android:fontFamily="@font/aclonica"
         android:textColor="@color/lightpink"
         android:text="Show Map"
@@ -71,7 +71,7 @@
         android:layout_height="21dp"
         android:layout_marginStart="39dp"
         android:layout_marginEnd="17dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toTopOf="@+id/backSensorTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/showMap"
@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="127dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/aclonica"
         android:textColor="@color/pink"
         android:text="Size of Map"
@@ -106,7 +106,7 @@
         app:layout_constraintBottom_toTopOf="@+id/remainingEnergy"
         app:layout_constraintEnd_toStartOf="@+id/animationSpeedSeekBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/go2losing" />
+        app:layout_constraintTop_toBottomOf="@id/mazePanelViewAnimated" />
 
     <SeekBar
         android:id="@+id/animationSpeedSeekBar"
@@ -133,32 +133,7 @@
         app:layout_constraintBottom_toTopOf="@+id/animationSpeedSeekBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/pause"
-        app:layout_constraintTop_toBottomOf="@id/go2losing" />
-
-    <Button
-        android:id="@+id/go2winning"
-        android:layout_width="300dp"
-        android:layout_height="130dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginBottom="15dp"
-        android:text= "Go2Winning"
-        app:layout_constraintBottom_toTopOf="@+id/speedText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/leftSensorTextView" />
-
-    <Button
-        android:id="@+id/go2losing"
-        android:layout_width="300dp"
-        android:layout_height="130dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginEnd="56dp"
-        android:text= "Go2losing"
-        app:layout_constraintBottom_toTopOf="@+id/speedText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/go2winning" />
+        app:layout_constraintTop_toBottomOf="@id/mazePanelViewAnimated" />
 
     <TextView
         android:id="@+id/leftSensorTextView"
@@ -166,17 +141,17 @@
         android:layout_height="48dp"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginBottom="6dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="Left Sensor"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/green"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/go2winning"
+        app:layout_constraintBottom_toTopOf="@id/mazePanelViewAnimated"
         app:layout_constraintEnd_toStartOf="@+id/rightSensorTextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintTop_toBottomOf="@id/animatedMapSizeSeekBar" />
 
     <TextView
         android:id="@+id/backSensorTextView"
@@ -190,7 +165,7 @@
         android:textColor="@color/green"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/go2winning"
+        app:layout_constraintBottom_toTopOf="@id/mazePanelViewAnimated"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/frontSensorTextView"
         app:layout_constraintTop_toBottomOf="@+id/animatedMapSizeSeekBar" />
@@ -199,7 +174,7 @@
         android:id="@+id/rightSensorTextView"
         android:layout_width="51dp"
         android:layout_height="48dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="56dp"
         android:layout_marginBottom="7dp"
         android:gravity="center"
@@ -208,7 +183,7 @@
         android:textColor="@color/green"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/go2winning"
+        app:layout_constraintBottom_toTopOf="@id/mazePanelViewAnimated"
         app:layout_constraintEnd_toStartOf="@+id/frontSensorTextView"
         app:layout_constraintStart_toEndOf="@+id/leftSensorTextView"
         app:layout_constraintTop_toBottomOf="@+id/animatedMapSizeSeekBar" />
@@ -217,19 +192,30 @@
         android:id="@+id/frontSensorTextView"
         android:layout_width="51dp"
         android:layout_height="48dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="39dp"
         android:layout_marginEnd="56dp"
-        android:layout_marginBottom="7dp"
+        android:layout_marginBottom="12dp"
         android:gravity="center"
         android:text="Front Sensor"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textColor="@color/green"
         android:textSize="15sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/go2winning"
+        app:layout_constraintBottom_toTopOf="@id/mazePanelViewAnimated"
         app:layout_constraintEnd_toStartOf="@+id/backSensorTextView"
         app:layout_constraintStart_toEndOf="@+id/rightSensorTextView"
         app:layout_constraintTop_toBottomOf="@+id/animatedMapSizeSeekBar" />
+    <edu.wm.cs.cs301.EffieZhang.gui.MazePanel
+        android:id="@+id/mazePanelViewAnimated"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="55dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@id/speedText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/leftSensorTextView" />
 
 
 

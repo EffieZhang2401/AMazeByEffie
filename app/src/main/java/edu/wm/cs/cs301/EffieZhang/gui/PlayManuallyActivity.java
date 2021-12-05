@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import android.widget.SeekBar;
 import edu.wm.cs.cs301.EffieZhang.R;
 
 /**
@@ -36,13 +37,14 @@ public class PlayManuallyActivity extends AppCompatActivity {
     StatePlaying statePlaying;  // class used to operate maze
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final MazePanel panel = (MazePanel) findViewById(R.id.manualMazePanel);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.state_playmanually);
+        final MazePanel panel = (MazePanel) findViewById(R.id.manualMazePanel);
         statePlaying = new StatePlaying();
         statePlaying.setPlayManuallyActivity(this);
         statePlaying.start(panel);
+        setSizeOfMap();
         pathlength = 0;
         ImageButton upButton = (ImageButton) findViewById(R.id.upButton);
         upButton.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +82,44 @@ public class PlayManuallyActivity extends AppCompatActivity {
                 pathlength++;
             }
         });
+    }
+    /**
+     * This method sets the size of the map to the
+     * size requested by the user.
+     */
+    private void setSizeOfMap(){
+        final SeekBar mapSize1 = (SeekBar) findViewById(R.id.mapSizeSeekBar);
+        //final TextView skillLevelText = (TextView) findViewById(R.id.skillLevelTextView);
+        mapSize1.setMin(MIN_MAP_SIZE);
+        mapSize1.setProgress(15);
+        mapSize1.setMax(MAX_MAP_SIZE);
+        mapSize1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int tempMapSize = 0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                tempMapSize = i;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                setMapSize(tempMapSize);
+            }
+        });
+    }
+    /**
+     * This method sets the map to be
+     * the size requested by the user, which
+     * was passed down to it through setSizeOfMap().
+     * @param size of the map
+     */
+    private void setMapSize(int size){
+        mapSize = size;
+        statePlaying.setMapScale(mapSize);
+        //Log.v("Map Size: " + mapSize);
     }
     @Override
     public void onBackPressed(){

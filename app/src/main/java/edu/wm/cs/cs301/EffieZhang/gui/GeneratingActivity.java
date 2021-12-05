@@ -149,76 +149,18 @@ public class GeneratingActivity extends AppCompatActivity implements Order{
              */
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PlayManuallyActivity.class);
-                //Bundle bundle = getIntent().getExtras();
-                //intent.putExtras(bundle);
-                startActivity(intent);
-                //if (driver.equals("Wall Follower")||driver.equals("Wizard")) {
-                    //Intent intent = new Intent(getApplicationContext(), PlayAnimationActivity.class);
-                    //Bundle bundle = getIntent().getExtras();
-                    //bundle.putString("Driver", driver);
-                    //bundle.putString("Robot", robot);
-                    //intent.putExtras(bundle);
-                    //startActivity(intent);
-                //}
-                //else if (driver.equals("Manual")) {
-                    //Intent intent = new Intent(getApplicationContext(), PlayManuallyActivity.class);
-                    //Bundle bundle = getIntent().getExtras();
-                    //intent.putExtras(bundle);
-                    //startActivity(intent);
-                //}
+                if (DataHolder.getDriverConfig().equals("Wall Follower")||DataHolder.getDriverConfig().equals("Wizard")) {
+                    Intent intent = new Intent(getApplicationContext(), PlayAnimationActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = new Intent(getApplicationContext(), PlayManuallyActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
     }
-
-
-    /**
-     * This method makes the app move to the next activity
-     * when the start playing button has been pressed,
-     * which is PlayManuallyActivity if the user chose the
-     * manual driver or is PlayAnimationActivity if the user chose
-     * the Wall Follower or Wizard driver.
-     * @param view which is the start button
-     */
-    public void moveToNextActivity(View view){
-        if (driver.equals("Wall Follower")) {
-            sendAnimatedMessage(view);
-        } else if ( driver.equals("Wizard")) {
-            sendAnimatedMessage(view);
-        } else if (driver.equals("Manual")) {
-            sendManualMessage(view);
-        }
-    }
-
-    /**
-     * This method moves the app to the
-     * PlayAnimationActivity class.
-     * @param view which is the start button
-     */
-    public void sendAnimatedMessage(View view){
-        Intent intent = new Intent(this, PlayAnimationActivity.class);
-        Bundle bundle = getIntent().getExtras();
-        bundle.putString("Driver", driver);
-        bundle.putString("Robot", robot);
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
-
-    /**
-     * This method moves the app to the
-     * PlayManuallyActivity class.
-     * @param view which is the start button
-     */
-    public void sendManualMessage(View view){
-        Intent intent = new Intent(this, PlayManuallyActivity.class);
-        Bundle bundle = getIntent().getExtras();
-        intent.putExtras(bundle);
-        startActivity(intent);
-    }
-
-
 
     /**
      * Initializes each of the elements in the order
