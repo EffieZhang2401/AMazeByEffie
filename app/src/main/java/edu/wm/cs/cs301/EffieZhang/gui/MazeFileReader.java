@@ -3,14 +3,14 @@
  */
 package edu.wm.cs.cs301.EffieZhang.gui;
 
-import generation.BSPBranch;
-import generation.BSPLeaf;
-import generation.BSPNode;
-import generation.Floorplan;
-import generation.Distance;
-import generation.Maze;
-import generation.MazeContainer;
-import generation.Wall;
+import edu.wm.cs.cs301.EffieZhang.generation.BSPBranch;
+import edu.wm.cs.cs301.EffieZhang.generation.BSPLeaf;
+import edu.wm.cs.cs301.EffieZhang.generation.BSPNode;
+import edu.wm.cs.cs301.EffieZhang.generation.Distance;
+import edu.wm.cs.cs301.EffieZhang.generation.Floorplan;
+import edu.wm.cs.cs301.EffieZhang.generation.Maze;
+import edu.wm.cs.cs301.EffieZhang.generation.MazeContainer;
+import edu.wm.cs.cs301.EffieZhang.generation.Wall;
 
 import java.io.File;
 import java.util.ArrayList;

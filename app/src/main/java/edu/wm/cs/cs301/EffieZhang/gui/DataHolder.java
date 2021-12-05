@@ -1,6 +1,7 @@
 package edu.wm.cs.cs301.EffieZhang.gui;
 
 import android.app.Application;
+import edu.wm.cs.cs301.EffieZhang.generation.Maze;
 
 /**
  * This dataholder can save the data collected through user's input
@@ -9,7 +10,7 @@ import android.app.Application;
  * hasroom, and pathlength.
  * @author effiezhang
  */
-public class DataHolder extends Application {
+public class DataHolder{
     private static int level;
     private static String driverConfig;
     private static String robotConfig;
@@ -17,6 +18,40 @@ public class DataHolder extends Application {
     private static String algorithm;
     private static Boolean hasroom;
     private static int energyConsumption;
+    private static Maze maze;
+    private static int seed;
+
+    /**
+     * set the seed
+     * @param s
+     */
+    public static void setSeed(int s){
+        seed = s;
+    }
+
+    /**
+     * get the seed
+     * @return seed
+     */
+    public static int getSeed(){
+        return seed;
+    }
+
+    /**
+     * set the maze
+     * @param m
+     */
+    public static void setMaze(Maze m){
+        maze = m;
+    }
+
+    /**
+     * get the maze
+     * @return maze
+     */
+    public static Maze getMaze(){
+        return maze;
+    }
 
     public static void setEnergyConsumption(int energy){
         energyConsumption = energy;

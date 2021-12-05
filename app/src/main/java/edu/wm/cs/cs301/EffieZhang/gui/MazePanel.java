@@ -84,7 +84,7 @@ public class MazePanel extends View implements P5PanelF21{
      */
     @Override
     public void onDraw(Canvas canvas){
-        myTestImage(canvas);
+        //myTestImage(canvas);
         super.onDraw(canvas);
         canvas.drawColor(Color.WHITE);
         Bitmap myBitmap = Bitmap.createScaledBitmap(bitmap, 1050, 1050, true);
@@ -219,7 +219,7 @@ public class MazePanel extends View implements P5PanelF21{
      * @param extensionX
      * @return
      */
-    public int getWallColor(final int d, final int cc, int extensionX) {
+    public static int getWallColor(final int d, final int cc, int extensionX) {
         // compute rgb value, depends on distance and x direction
         final int distance = d / 4;
         // mod used to limit the number of colors to 6

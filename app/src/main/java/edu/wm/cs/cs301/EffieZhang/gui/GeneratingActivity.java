@@ -3,6 +3,7 @@ package edu.wm.cs.cs301.EffieZhang.gui;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -11,8 +12,15 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 import java.util.ArrayList;
+import android.os.Looper;
+import android.os.Message;
 import java.util.List;
 import android.widget.Button;
+import edu.wm.cs.cs301.EffieZhang.generation.Order;
+import edu.wm.cs.cs301.EffieZhang.generation.StubOrder;
+import edu.wm.cs.cs301.EffieZhang.generation.Maze;
+import edu.wm.cs.cs301.EffieZhang.generation.MazeFactory;
+import java.util.Random;
 
 import edu.wm.cs.cs301.EffieZhang.R;
 
@@ -33,11 +41,39 @@ import edu.wm.cs.cs301.EffieZhang.R;
  *
  * @author Effie Zhang
  */
-public class GeneratingActivity extends AppCompatActivity {
-
+public class GeneratingActivity extends AppCompatActivity implements Order{
+    private static final String TAG = "GeneratingActivity";  //message key
+    private static final String PROGRESS_KEY = "my message key";  //message key
+    private ProgressBar loadingBar;  //progress bar for loading maze
+    private Handler handler;  //handler to send messages from background thread to UI thread
+    private String driver;  //driver that the maze is going to use
+    private boolean backPressed = false;  //tells whether or not the back button has been pressed
+    private String robot;  //sensor configuration that the user chooses
+    private Order.Builder builder;  // builder for the maze
+    private int skillLevel;  // difficulty level of the maze
+    private boolean rooms;  // whether or not the maze has rooms
+    private int seed;  // seed to generate random maze
+    protected MazeFactory factory;  // factory created to order maze
+    private int percentdone;  // gives the percent that the maze has loaded
+    public static Maze mazeConfig;  // static variable for the maze configuration
+    private boolean deterministic = false;  // tells whether or not the maze is perfect
+    //private final int mode = Activity.MODE_PRIVATE;  // mode for the preference storage
+    private final String MYPREFS = "My Preferences";  // string name for myPreferences
+    //private SharedPreferences myPreferences;  // storage for maze settings
+    //private SharedPreferences.Editor myEditor;  // editor for myPreferences
+    private final int DEFAULT_SEED = 13;  // default seed value
+    public GeneratingActivity(){
+        seed = 13;
+        percentdone = 0;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        factory= new MazeFactory();
+        Bundle bundle = getIntent().getExtras();
+        init(bundle);
+        factory.order(this);
         setContentView(R.layout.state_generating);
         // driverSelect spinner
         List<String> driverSelect = new ArrayList<String>();
@@ -56,6 +92,7 @@ public class GeneratingActivity extends AppCompatActivity {
                         driverSelectSpinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                 Log.v("Driver Select toast", "Selected" + driverSelectSpinner.getSelectedItem().toString());
                 DataHolder.setDriverConfig(driverSelectSpinner.getSelectedItem().toString());
+                robot = driverSelectSpinner.getSelectedItem().toString();
             }
 
             @Override
@@ -82,6 +119,8 @@ public class GeneratingActivity extends AppCompatActivity {
                         robotConfigSpinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
                 Log.v("Robot Config toast", "Selected" + robotConfigSpinner.getSelectedItem().toString());
                 DataHolder.setRobotConfig(robotConfigSpinner.getSelectedItem().toString());
+                driver = robotConfigSpinner.getSelectedItem().toString();
+                //showStartButton(view);
             }
 
             @Override
@@ -91,7 +130,18 @@ public class GeneratingActivity extends AppCompatActivity {
         });
 
 
-        final ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        loadingBar = (ProgressBar) findViewById(R.id.progressBar);
+        loadingBar.setMax(100);
+        //runThread(loadingBar);
+        handler = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(Message msg){
+                Bundle bundle = msg.getData();
+                int progressBarMessage = bundle.getInt(PROGRESS_KEY);
+                //showStartButton(loadingBar);
+            }
+        };
+
         Button btn = (Button)findViewById(R.id.progressButton);
         btn.setOnClickListener(new View.OnClickListener() {
             /**
@@ -99,26 +149,162 @@ public class GeneratingActivity extends AppCompatActivity {
              */
             @Override
             public void onClick(View v) {
-                new Thread(new Runnable() {
-                    public void run() {
-                        while (progressBar.getProgress() < 100) {
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            progressBar.incrementProgressBy(10);
-                        }
-                        Intent next;
-                        if (driverSelectSpinner.getSelectedItem().toString() == "Manual") {
-                            next = new Intent(getApplicationContext(), PlayManuallyActivity.class);
-                        } else {
-                            next = new Intent(getApplicationContext(), PlayAnimationActivity.class);
-                        }
-                        startActivity(next);
-                    }
-                }).start();
+                Intent intent = new Intent(getApplicationContext(), PlayManuallyActivity.class);
+                //Bundle bundle = getIntent().getExtras();
+                //intent.putExtras(bundle);
+                startActivity(intent);
+                //if (driver.equals("Wall Follower")||driver.equals("Wizard")) {
+                    //Intent intent = new Intent(getApplicationContext(), PlayAnimationActivity.class);
+                    //Bundle bundle = getIntent().getExtras();
+                    //bundle.putString("Driver", driver);
+                    //bundle.putString("Robot", robot);
+                    //intent.putExtras(bundle);
+                    //startActivity(intent);
+                //}
+                //else if (driver.equals("Manual")) {
+                    //Intent intent = new Intent(getApplicationContext(), PlayManuallyActivity.class);
+                    //Bundle bundle = getIntent().getExtras();
+                    //intent.putExtras(bundle);
+                    //startActivity(intent);
+                //}
             }
         });
+
     }
+
+
+    /**
+     * This method makes the app move to the next activity
+     * when the start playing button has been pressed,
+     * which is PlayManuallyActivity if the user chose the
+     * manual driver or is PlayAnimationActivity if the user chose
+     * the Wall Follower or Wizard driver.
+     * @param view which is the start button
+     */
+    public void moveToNextActivity(View view){
+        if (driver.equals("Wall Follower")) {
+            sendAnimatedMessage(view);
+        } else if ( driver.equals("Wizard")) {
+            sendAnimatedMessage(view);
+        } else if (driver.equals("Manual")) {
+            sendManualMessage(view);
+        }
+    }
+
+    /**
+     * This method moves the app to the
+     * PlayAnimationActivity class.
+     * @param view which is the start button
+     */
+    public void sendAnimatedMessage(View view){
+        Intent intent = new Intent(this, PlayAnimationActivity.class);
+        Bundle bundle = getIntent().getExtras();
+        bundle.putString("Driver", driver);
+        bundle.putString("Robot", robot);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+
+    /**
+     * This method moves the app to the
+     * PlayManuallyActivity class.
+     * @param view which is the start button
+     */
+    public void sendManualMessage(View view){
+        Intent intent = new Intent(this, PlayManuallyActivity.class);
+        Bundle bundle = getIntent().getExtras();
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+
+
+    /**
+     * Initializes each of the elements in the order
+     * with the values chosen by the user in AMazeActivity
+     * @param bundle
+     */
+    private void init(Bundle bundle){
+        factory = new MazeFactory();
+        switch(bundle.getString("Maze Generator")){
+            case "Prim":
+                builder = Builder.Prim;
+                break;
+            case "Boruvka":
+                builder = Builder.Boruvka;
+                break;
+            case "DFS":
+                builder = Builder.DFS;
+                break;
+        }
+        skillLevel = bundle.getInt("Skill Level");
+        rooms = bundle.getBoolean("Rooms");
+        if(!deterministic){
+            Random rand = new Random();
+            seed = rand.nextInt();
+        }
+    }
+
+    /**
+     * Returns the difficulty level that the user chooses
+     * @return int skill level
+     */
+    @Override
+    public int getSkillLevel() {
+        return skillLevel;
+    }
+
+    /**
+     * Returns the builder that the user chooses
+     * @return Builder builder
+     */
+    @Override
+    public Builder getBuilder() {
+        return builder;
+    }
+
+    /**
+     * Returns whether or not the user wants rooms
+     * @return boolean rooms
+     */
+    @Override
+    public boolean isPerfect() {
+        return !rooms;
+    }
+
+    /**
+     * Returns the random seed
+     * @return int seed
+     */
+    @Override
+    public int getSeed() {
+        return seed;
+    }
+
+
+    /**
+     * Sets the static variable mazeConfig so that
+     * every class can access the maze once it has been
+     * created
+     */
+    @Override
+    public void deliver(Maze mazeConfig) {
+        this.mazeConfig = mazeConfig;
+    }
+
+    @Override
+    public void updateProgress(int percentage) {
+        Log.v(TAG, "Updating progress loaded to " + percentage);
+        if (this.percentdone < percentage && percentage <= 100) {
+            this.percentdone = percentage;
+            loadingBar.setProgress(percentdone);
+        }
+        Message message = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putInt(PROGRESS_KEY, this.percentdone);
+        message.setData(bundle);
+        handler.sendMessage(message);
+    }
+
 }

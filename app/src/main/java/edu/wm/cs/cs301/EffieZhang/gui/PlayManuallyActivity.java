@@ -25,13 +25,24 @@ import edu.wm.cs.cs301.EffieZhang.R;
  */
 public class PlayManuallyActivity extends AppCompatActivity {
     private ToggleButton hasWall, showMap, solution;
+    private static final int MAX_MAP_SIZE = 80;  //max size that the map can be
+    private static final int MIN_MAP_SIZE = 1;  //min size that the map can be
+    private int pathLength = 0;  //length of the path the user has taken
+    private int mapSize = 15;  //default map size
+    private int shortestPathLength = 0;  //shortest possible path length, temp value
     private Button buttonSubmit;
     private int pathlength;
+    private MazePanel panel;  // panel used to draw maze
+    StatePlaying statePlaying;  // class used to operate maze
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final MazePanel panel = (MazePanel) findViewById(R.id.mazePanelView);
+        final MazePanel panel = (MazePanel) findViewById(R.id.manualMazePanel);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.state_playmanually);
+        statePlaying = new StatePlaying();
+        statePlaying.setPlayManuallyActivity(this);
+        statePlaying.start(panel);
         pathlength = 0;
         ImageButton upButton = (ImageButton) findViewById(R.id.upButton);
         upButton.setOnClickListener(new View.OnClickListener() {

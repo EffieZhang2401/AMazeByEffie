@@ -117,10 +117,23 @@ public class Wall {
         // initialize boolean flags as false
         partition = false;
         seen = false;
-        // determine color
-        int d = calculateRGBValue(distance);
-        setColor(panel.getWallColor(distance, cc, d));
+        initColor(distance,cc);
         // all fields initialized
+    }
+
+    /**
+     * Determine and set the color for this wall.
+     *
+     * @param distance
+     *            to exit
+     * @param cc
+     *            obscure
+     */
+    private void initColor(final int distance, final int cc) {
+        // mod used to limit the number of colors to 6
+        final int rgbValue = MazePanel.getWallColor(distance, cc, getExtensionX());
+        //System.out.println("Initcolor rgb: " + rgbValue);
+        setColor(rgbValue);
     }
     
     /**

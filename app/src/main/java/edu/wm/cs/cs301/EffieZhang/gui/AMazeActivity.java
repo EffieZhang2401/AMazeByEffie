@@ -100,7 +100,7 @@ public class AMazeActivity extends AppCompatActivity {
         exploreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent next = new Intent(getApplicationContext(), GeneratingActivity.class);
+                Intent intent = new Intent(getApplicationContext(), GeneratingActivity.class);
                 DataHolder.setMazeAlgorithm(mazeSelectSpinner.getSelectedItem().toString());
                 if(roomSpinner.getSelectedItem().toString().equals("Yes")){
                     DataHolder.setRoomsOrNoRooms(true);
@@ -110,7 +110,13 @@ public class AMazeActivity extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), "Pressed Explore", Toast.LENGTH_SHORT).show();
                 Log.v("Explore toast", "Pressed Explore");
-                startActivity(next);
+                Bundle bundle = new Bundle();
+                bundle.putInt("Skill Level", DataHolder.getSkillLevel());
+                bundle.putString("Maze Generator", DataHolder.getMazeAlgorithm());
+                bundle.putBoolean("Rooms", DataHolder.getRoomsOrNoRooms());
+                bundle.putBoolean("Revisit", false);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }

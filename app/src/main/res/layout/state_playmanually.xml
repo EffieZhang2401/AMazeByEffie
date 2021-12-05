@@ -172,7 +172,7 @@
     <edu.wm.cs.cs301.EffieZhang.gui.MazePanel
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:id="@+id/mazePanelView"
+        android:id="@+id/manualMazePanel"
         android:defaultFocusHighlightEnabled="true"
         app:layout_constraintBottom_toTopOf="@+id/upButton"
         app:layout_constraintEnd_toEndOf="parent"

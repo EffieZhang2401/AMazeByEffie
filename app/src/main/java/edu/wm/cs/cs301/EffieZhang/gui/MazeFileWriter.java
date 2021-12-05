@@ -4,8 +4,8 @@
 package edu.wm.cs.cs301.EffieZhang.gui;
 
 
-import generation.BSPNode;
-import generation.Floorplan;
+import edu.wm.cs.cs301.EffieZhang.generation.BSPNode;
+import edu.wm.cs.cs301.EffieZhang.generation.Floorplan;
 
 import java.io.File;
 

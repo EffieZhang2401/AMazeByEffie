@@ -1,69 +1,43 @@
 package edu.wm.cs.cs301.EffieZhang.gui;
 
+//import static org.junit.Assert.assertEquals;
+import android.util.Log;
+
 import edu.wm.cs.cs301.EffieZhang.generation.CardinalDirection;
-
-
+import edu.wm.cs.cs301.EffieZhang.generation.Wallboard;
+import edu.wm.cs.cs301.EffieZhang.gui.Constants.UserInput;
 /**
- * This interface specifies methods to operate a robot that is inside 
- * a maze at a particular location and looking in a particular direction.
- * A robot needs to be given an existing maze (a controller) to be operational.
- * It is configured by mounting distance sensors to a robot such that it can
+ * A reliable robot interacts with the game controller to perform operations like turn and
+ * move. The robot has four sensor to sensor objects. It is configured by mounting distance sensors to a robot such that it can
  * measure the distance to an obstacle, a wall, in the direction that sensor
  * has been mounted on the robot.
  * It provides an operating platform for a robot driver that experiences a maze (the real world) 
  * through the sensors and actuators of this robot interface.
- * 
- * Note that a robot may be very limited in its mobility, e.g. only 90 degree left or right turns, 
- * which makes sense in the artificial terrain of a maze, and its sensing capability, 
- * e.g. only a sensor on its front or left to detect remote obstacles. 
- * Left/right is a notion relative to the robot's direction 
- * or relative to the underlying maze. 
- * To avoid a confusion, the latter is considered a direction in an absolute sense 
- * and it may be better to describe it as a cardinal direction 
- * north, south, east, west than up, down, right, left. 
- * 
- * A robot comes with a battery level that is depleted during operations 
- * such that a robot may actually stop if it runs out of energy.
- * This interface supports energy consideration. 
- * A robot may also stop when hitting an obstacle.
- * The robot's distance sensors are subject to failures and repairs
- * such that the sensors may become temporarily unavailable 
- * during the robot's mission. 
- * 
- * WARNING: the use of CW_BOT/CW_TOP and CardinalDirection in
- * Floorplan and Mazebuilder does not directly match with the Map 
- * which draws position (0,0) at the lower left corner, such that 
- * x values grow towards the right, y values grow towards the top and
- * direction SOUTH is towards the top of the display. 
- * Or in other words, the maze is drawn upside down by the Map but
- * East and West are as one expects it (East to the right, West to the left).
- *  
- * The rotation is calculated with polar coordinates (angle) towards a 
- * Cartesian coordinate system where a southbound direction is (dx,dy)=(0,1).
- * 
- * Implementing classes: mobile robots with distance sensors of different kind. 
+ *
  * 
  * Collaborators: a controller that holds a maze to be explored, 
- * a robotdriver class that operates robot
+ * ReliableSensor
  * 
- * @author Peter Kemper
+ * @author Effie Zhang
  *
  */
-public interface Robot {
-	/**
-	 * Describes all possible turns that a robot can do when it rotates on the spot.
-	 * Left is 90 degrees left, right is 90 degrees right, turn around is 180 degrees.
-	 */
-	public enum Turn { LEFT, RIGHT, AROUND };
-	/**
-	 * Describes all possible directions from the point of view of the robot,
-	 * i.e., relative to its current forward position.
-	 * Mind the difference between the robot's point of view
-	 * and cardinal directions in terms of north, south, east, west.
-	 * These directions are also used to express how
-	 * a sensor is mounted on the robot.
-	 */
-	public enum Direction { LEFT, RIGHT, FORWARD, BACKWARD };
+public class ReliableRobot implements Robot{
+	private static final String TAG = "ReliableRobot";  //string message key
+	private StatePlaying statePlaying;
+	private PlayAnimationActivity playAnimationActivity;
+	private ReliableSensor sensor;
+	private float batteryLevel;
+	private int odometer = 0;
+	private boolean hasStopped = false;
+	private static final int ROTATE_90_ENERGY = 3;
+	private static final int MOVE1_ENERGY = 6;
+	private static final int JUMP_ENERGY = 40;
+	private static final int INITIAL_ENERGY = 3500;
+
+	public ReliableRobot() {
+		batteryLevel = INITIAL_ENERGY;
+		sensor = new ReliableSensor();
+	}
 
 	/**
 	 * Provides the robot with a reference to the controller to cooperate with.
@@ -76,12 +50,18 @@ public interface Robot {
 	 * or if controller is not in playing state,
 	 * or if controller does not have a maze
 	 */
-	void setStatePlaying(StatePlaying statePlaying);
+	@Override
+	public void setStatePlaying(StatePlaying statePlaying) {
+		if(statePlaying == null || GeneratingActivity.mazeConfig == null) {
+			throw new IllegalArgumentException();
+		}
+		this.statePlaying = statePlaying;
+	}
 
-	void setPlayAnimationActivity(PlayAnimationActivity playAnimationActivity);
-	///////////////////////////////////////////////////////////////////
-	/////////////////// Current location in game   ////////////////////
-	///////////////////////////////////////////////////////////////////
+	public void setPlayAnimationActivity(PlayAnimationActivity playAnimationActivity){
+		this.playAnimationActivity = playAnimationActivity;
+	}
+
 	/**
 	 * Provides the current position as (x,y) coordinates for
 	 * the maze as an array of length 2 with [x,y].
@@ -89,16 +69,28 @@ public interface Robot {
 	 * and ({@code 0 <= x < width, 0 <= y < height}) of the maze
 	 * @throws Exception if position is outside of the maze
 	 */
-	int[] getCurrentPosition() throws Exception;
+	@Override
+	public int[] getCurrentPosition() throws Exception {
+		int[] currentPosition = statePlaying.getCurrentPosition();
+		if(currentPosition[0] >= 0 && currentPosition[0] < GeneratingActivity.mazeConfig.getWidth() && currentPosition[1] >= 0 && currentPosition[1] < GeneratingActivity.mazeConfig.getHeight()) {
+			return currentPosition;
+		}
+		else {
+			Log.v(TAG, "ReliableRobot.getCurrentPosition: Out of Bounds Exception");
+			System.out.println("ReliableRobot.getCurrentPosition: Out of Bounds Exception");
+			throw new IndexOutOfBoundsException();
+		}
+	}
+
 	/**
 	 * Provides the robot's current direction.
 	 * @return cardinal direction is the robot's current direction in absolute terms
 	 */
-	CardinalDirection getCurrentDirection();
+	@Override
+	public CardinalDirection getCurrentDirection() {
+		return statePlaying.getCurrentDirection();
+	}
 
-	///////////////////////////////////////////////////////////////////
-	/////////////////// Battery and Energy consumption ////////////////
-	///////////////////////////////////////////////////////////////////
 	/**
 	 * Returns the current battery level.
 	 * The robot has a given battery level (energy level)
@@ -108,7 +100,11 @@ public interface Robot {
 	 * If battery {@code level <= 0} then robot stops to function and hasStopped() is true.
 	 * @return current battery level, {@code level > 0} if operational.
 	 */
-	float getBatteryLevel() ;
+	@Override
+	public float getBatteryLevel() {
+		return batteryLevel;
+	}
+
 	/**
 	 * Sets the current battery level.
 	 * The robot has a given battery level (energy level)
@@ -119,14 +115,27 @@ public interface Robot {
 	 * @param level is the current battery level
 	 * @throws IllegalArgumentException if level is negative
 	 */
-	void setBatteryLevel(float level) ;
+	@Override
+	public void setBatteryLevel(float level) {
+		if(level <= 0) {
+			Log.v(TAG, "ReliableRobot.setBatteryLevel: Illegal Argument Exception");
+			System.out.println("ReliableRobot.setBatteryLevel: Illegal Argument Exception");
+			throw new IllegalArgumentException();
+		}
+		batteryLevel = level;
+
+	}
 
 	/**
 	 * Gives the energy consumption for a full 360 degree rotation.
 	 * Scaling by other degrees approximates the corresponding consumption.
 	 * @return energy for a full rotation
 	 */
-	float getEnergyForFullRotation() ;
+	@Override
+	public float getEnergyForFullRotation() {
+		return ROTATE_90_ENERGY * 4;
+	}
+
 	/**
 	 * Gives the energy consumption for moving forward for a distance of 1 step.
 	 * For simplicity, we assume that this equals the energy necessary
@@ -134,10 +143,11 @@ public interface Robot {
 	 * approximately the corresponding multiple.
 	 * @return energy for a single step forward
 	 */
-	float getEnergyForStepForward() ;
-	///////////////////////////////////////////////////////////////////
-	/////////////////// Odometer, distance traveled    ////////////////
-	///////////////////////////////////////////////////////////////////
+	@Override
+	public float getEnergyForStepForward() {
+		return MOVE1_ENERGY;
+	}
+
 	/**
 	 * Gets the distance traveled by the robot.
 	 * The robot has an odometer that calculates the distance the robot has moved.
@@ -147,7 +157,11 @@ public interface Robot {
 	 * The counter can be reset to 0 with resetOdomoter().
 	 * @return the distance traveled measured in single-cell steps forward
 	 */
-	int getOdometerReading();
+	@Override
+	public int getOdometerReading() {
+		return odometer;
+	}
+
 	/**
 	 * Resets the odometer counter to zero.
 	 * The robot has an odometer that calculates the distance the robot has moved.
@@ -155,17 +169,39 @@ public interface Robot {
 	 * that it moves is added to the odometer counter.
 	 * The odometer reading gives the path length if its setting is 0 at the start of the game.
 	 */
-	void resetOdometer();
-	///////////////////////////////////////////////////////////////////
-	/////////////////// Actuators /////////////////////////////////////
-	///////////////////////////////////////////////////////////////////
+	@Override
+	public void resetOdometer() {
+		odometer = 0;
+
+	}
+
 	/**
 	 * Turn robot on the spot for amount of degrees.
 	 * If robot runs out of energy, it stops,
 	 * which can be checked by hasStopped() == true and by checking the battery level.
 	 * @param turn is the direction to turn and relative to current forward direction.
 	 */
-	void rotate(Turn turn);
+	@Override
+	public void rotate(Turn turn) {
+		if(batteryLevel < ROTATE_90_ENERGY) {
+			hasStopped = true;
+		}
+		else if(turn == Turn.LEFT) {
+			statePlaying.keyDown(UserInput.LEFT, 1);
+			batteryLevel -= ROTATE_90_ENERGY;
+		}
+		else if(turn == Turn.RIGHT) {
+			statePlaying.keyDown(UserInput.RIGHT, 1);
+			batteryLevel -= ROTATE_90_ENERGY;
+		}
+		else if(turn == Turn.AROUND) {
+			statePlaying.keyDown(UserInput.RIGHT, 1);
+			statePlaying.keyDown(UserInput.RIGHT, 1);
+			batteryLevel -= ROTATE_90_ENERGY * 2;
+		}
+
+	}
+
 	/**
 	 * Moves robot forward a given number of steps. A step matches a single cell.
 	 * If the robot runs out of energy somewhere on its way, it stops,
@@ -177,7 +213,36 @@ public interface Robot {
 	 * @param distance is the number of cells to move in the robot's current forward direction
 	 * @throws IllegalArgumentException if distance not positive
 	 */
-	void move(int distance);
+	@Override
+	public void move(int distance) {
+		int[] currentPos = new int[2];
+		try {
+			currentPos = getCurrentPosition();
+		}
+		catch(Exception E) {
+			Log.v(TAG, "Current Position not in maze");
+			System.out.println("Current Position not in maze");
+		}
+		if(distance < 0) {
+			Log.v(TAG, "ReliableRobot.move: Illegal Argument Exception");
+			System.out.println("ReliableRobot.move: Illegal Argument Exception");
+			throw new IllegalArgumentException();
+		}
+		for(int i = 0; i < distance; i++) {
+			if(batteryLevel < MOVE1_ENERGY) {
+				hasStopped = true;
+				break;
+			}
+			if(GeneratingActivity.mazeConfig.hasWall(currentPos[0], currentPos[1], getCurrentDirection())) {
+				hasStopped = true;
+				break;
+			}
+			odometer++;
+			statePlaying.keyDown(UserInput.UP, 1);
+			batteryLevel -= MOVE1_ENERGY;
+		}
+	}
+
 	/**
 	 * Makes robot move in a forward direction even if there is a wall
 	 * in front of it. In this sense, the robot jumps over the wall
@@ -190,22 +255,70 @@ public interface Robot {
 	 * it remains at its current location and direction,
 	 * hasStopped() == true as this is not supposed to happen.
 	 */
-	void jump();
-	///////////////////////////////////////////////////////////////////
-	/////////////////// Sensors   /////////////////////////////////////
-	///////////////////////////////////////////////////////////////////
+	@Override
+	public void jump() {
+		try {
+			int[] currentPos = getCurrentPosition();
+			if(currentPos[0]+1 < GeneratingActivity.mazeConfig.getWidth() && currentPos[1]+1 < GeneratingActivity.mazeConfig.getHeight()) {
+				if(batteryLevel > JUMP_ENERGY) {
+					statePlaying.keyDown(UserInput.JUMP, 1);
+					odometer++;
+					batteryLevel -= JUMP_ENERGY;
+				}
+				else {
+					hasStopped = true;
+				}
+			}
+			else {
+				hasStopped = true;
+			}
+		}
+		catch(Exception e){
+			Log.v(TAG, "Error: Current Position Not In Maze1");
+			System.out.println("Error: Current Position Not In Maze1");
+		}
+	}
+
 	/**
 	 * Tells if the current position is right at the exit but still inside the maze.
 	 * The exit can be in any direction. It is not guaranteed that
 	 * the robot is facing the exit in a forward direction.
 	 * @return true if robot is at the exit, false otherwise
 	 */
-	boolean isAtExit() ;
+	@Override
+	public boolean isAtExit() {
+		try {
+			int[] currentPos = getCurrentPosition();
+			if(GeneratingActivity.mazeConfig.getFloorplan().isExitPosition(currentPos[0], currentPos[1])) {
+				return true;
+			}
+		}
+		catch(Exception e) {
+			Log.v(TAG, "Error: Current Position Not In Maze2");
+			System.out.println("Error: Current Position Not In Maze2");
+		}
+		return false;
+	}
+
 	/**
 	 * Tells if current position is inside a room.
 	 * @return true if robot is inside a room, false otherwise
 	 */
-	boolean isInsideRoom();
+	@Override
+	public boolean isInsideRoom() {
+		try {
+			int[] currentPos = getCurrentPosition();
+			if(GeneratingActivity.mazeConfig.getFloorplan().isInRoom(currentPos[0], currentPos[1])) {
+				return true;
+			}
+		}
+		catch(Exception e) {
+			Log.v(TAG, "Error: Current Position Not In Maze3");
+			System.out.println("Error: Current Position Not In Maze3");
+		}
+		return false;
+	}
+
 	/**
 	 * Tells if the robot has stopped for reasons like lack of energy,
 	 * hitting an obstacle, etc.
@@ -213,7 +326,17 @@ public interface Robot {
 	 * move anymore.
 	 * @return true if the robot has stopped, false otherwise
 	 */
-	boolean hasStopped() ;
+	@Override
+	public boolean hasStopped() {
+		if(batteryLevel == 0) {
+			return true;
+		}
+		if(hasStopped) {
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * Tells the distance to an obstacle (a wall)
 	 * in the given direction.
@@ -228,7 +351,22 @@ public interface Robot {
 	 * @throws UnsupportedOperationException if robot has no sensor in this direction
 	 * or the sensor exists but is currently not operational
 	 */
-	int distanceToObstacle(Direction direction) throws UnsupportedOperationException ;
+	@Override
+	public int distanceToObstacle(Direction direction) throws UnsupportedOperationException {
+		sensor.setSensorDirection(direction);
+		try {
+			int[] currentPos = getCurrentPosition();
+			float[] tempBatteryLevel = new float[] {batteryLevel};
+			return sensor.distanceToObstacle(currentPos, getCurrentDirection(), tempBatteryLevel);
+		}
+		catch(Exception e) {
+			Log.v(TAG, "Error: Current Position Not In Maze4");
+			System.out.println("Error: Current Position Not In Maze4");
+		}
+
+		return 0;
+	}
+
 	/**
 	 * Tells if a sensor can identify the exit in the given direction relative to
 	 * the robot's current forward direction from the current position.
@@ -237,13 +375,22 @@ public interface Robot {
 	 * @throws UnsupportedOperationException if robot has no sensor in this direction
 	 * or the sensor exists but is currently not operational
 	 */
-	boolean canSeeThroughTheExitIntoEternity(Direction direction) throws UnsupportedOperationException ;
-
-
-	////// The following 2 methods will be fully implemented in
-	////// Project assignment 4 for a class UnreliableSensor.
-	////// For P3 and the ReliableSensor class,
-	////// it is sufficient to just throw the UnsupportedOperationException.
+	@Override
+	public boolean canSeeThroughTheExitIntoEternity(Direction direction) throws UnsupportedOperationException {
+		sensor.setSensorDirection(direction);
+		try {
+			int[] currentPos = getCurrentPosition();
+			float[] tempBatteryLevel = new float[] {batteryLevel};
+			if(sensor.distanceToObstacle(currentPos, getCurrentDirection(), tempBatteryLevel) == Integer.MAX_VALUE) {
+				return true;
+			}
+		}
+		catch(Exception e) {
+			Log.v(TAG, "Error: Current Position Not In Maze5");
+			System.out.println("Error: Current Position Not In Maze5");
+		}
+		return false;
+	}
 
 	/**
 	 * Method starts a concurrent, independent failure and repair
@@ -264,7 +411,13 @@ public interface Robot {
 	 * @param meanTimeToRepair is the mean time in seconds, must be greater than zero
 	 * @throws UnsupportedOperationException if method not supported
 	 */
-	void startFailureAndRepairProcess(Direction direction, int meanTimeBetweenFailures, int meanTimeToRepair) throws UnsupportedOperationException;
+	@Override
+	public void startFailureAndRepairProcess(Direction direction, int meanTimeBetweenFailures, int meanTimeToRepair)
+			throws UnsupportedOperationException {
+		throw new UnsupportedOperationException();
+
+	}
+
 	/**
 	 * This method stops a failure and repair process and
 	 * leaves the sensor in an operational state.
@@ -284,5 +437,10 @@ public interface Robot {
 	 * @param direction the direction the sensor is mounted on the robot
 	 * @throws UnsupportedOperationException if method not supported
 	 */
-	void stopFailureAndRepairProcess(Direction direction) throws UnsupportedOperationException;
+	@Override
+	public void stopFailureAndRepairProcess(Direction direction) throws UnsupportedOperationException {
+		throw new UnsupportedOperationException();
+
+	}
+
 }

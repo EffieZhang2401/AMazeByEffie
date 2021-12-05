@@ -23,7 +23,6 @@ import android.widget.Toast;
  * @author Effie Zhang
  */
 public class LosingActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

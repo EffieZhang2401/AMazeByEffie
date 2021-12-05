@@ -92,4 +92,14 @@
         android:layout_marginTop="20dp"
         android:text="Start Progress"
         android:textColor="@color/lightpink" />
+
+    <Button
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="160dp"
+        android:layout_marginTop="220dp"
+        android:text="Play"
+        android:visibility="invisible"
+        android:textColor="@color/lightpink" />
 </RelativeLayout>
