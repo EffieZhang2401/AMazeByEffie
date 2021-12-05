@@ -11,8 +11,16 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.Log;
 import static android.graphics.Color.rgb;
+import edu.wm.cs.cs301.EffieZhang.R;
 import android.view.View;
-
+import androidx.core.content.ContextCompat;
+/**
+ * Add functionality for double buffering to an AWT Panel class.
+ * Used for drawing a maze.
+ *
+ * @author Effie Zhang
+ *
+ */
 public class MazePanel extends View implements P5PanelF21{
     private static final long serialVersionUID = 2787329533730973905L;
     private Color col;
@@ -31,6 +39,9 @@ public class MazePanel extends View implements P5PanelF21{
 
     private int color;  //int color that paint is currently set on
     private static final int greenWM = Color.parseColor("#115740");
+    protected static final int lightPink = Color.parseColor("#FBE2E2");
+    protected static final int Pink = Color.parseColor("#F6508B");
+    private static final int Black = Color.parseColor("#FF000000");
     private static final int goldWM = Color.parseColor("#916f41");
     private static final int yellowWM = Color.parseColor("#FFFF99");
     private boolean top = true;  //boolean value that tells if top or bottom background rectangle is being drawn
@@ -48,6 +59,9 @@ public class MazePanel extends View implements P5PanelF21{
         canvas = new Canvas(bitmap);
         paint = new Paint();
         shaderPaint = new Paint();
+        //Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.pinkwall);
+        //BitmapShader sandShader = new BitmapShader(bitmap2, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+        //shaderPaint.setShader(sandShader);
     }
 
     /**
@@ -284,8 +298,8 @@ public class MazePanel extends View implements P5PanelF21{
      * @return the color to use for the background rectangle
      */
     private int getBackgroundColor(float percentToExit, boolean top) {
-        return top? blend(Color.valueOf(yellowWM), Color.valueOf(goldWM), percentToExit) :
-                blend(Color.valueOf(Color.LTGRAY), Color.valueOf(greenWM), percentToExit);
+        return top? blend(Color.valueOf(lightPink), Color.valueOf(Pink), percentToExit) :
+                blend(Color.valueOf(lightPink), Color.valueOf(Pink), percentToExit);
     }
 
     /**
@@ -299,12 +313,15 @@ public class MazePanel extends View implements P5PanelF21{
      */
     @Override
     public void addBackground(float percentToExit) {
-        // black rectangle in upper half of screen
-        //graphics.setColor(getBackgroundColor(percentToExit, true));
-        //graphics.fillRect(0, 0, Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT/2);
-        // grey rectangle in lower half of screen
-        //graphics.setColor(getBackgroundColor(percentToExit, false));
-        //graphics.fillRect(0, Constants.VIEW_HEIGHT/2, Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT/2);
+        //paint.setColor(getBackgroundColor(percentToExit, top));
+        //if(!top){
+            //paint.setColor(ContextCompat.getColor(getContext(), R.color.pink));
+        //}
+        //top = !top;
+        setColor(getBackgroundColor(percentToExit, true));
+        addFilledRectangle(0, 0, 1050, (3 * 1050)/5);
+        setColor(getBackgroundColor(percentToExit, false));
+        addFilledRectangle(0, (3 * 1050)/5, 1050, 1050/2);
 
     }
 

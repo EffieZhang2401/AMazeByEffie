@@ -50,6 +50,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
         upButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                statePlaying.keyDown(Constants.UserInput.UP, 1);
                 Toast.makeText(getApplicationContext(), "Forward", Toast.LENGTH_SHORT).show();
                 Log.v("Forward", "Forward");
                 pathlength++;
@@ -60,6 +61,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
         leftButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                statePlaying.keyDown(Constants.UserInput.LEFT, 1);
                 Toast.makeText(getApplicationContext(), "left", Toast.LENGTH_SHORT).show();
                 Log.v("left", "left");
             }
@@ -69,6 +71,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
         rightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                statePlaying.keyDown(Constants.UserInput.RIGHT, 1);
                 Toast.makeText(getApplicationContext(), "Right", Toast.LENGTH_SHORT).show();
                 Log.v("Right", "Right");
             }
@@ -77,6 +80,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
         jump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                statePlaying.keyDown(Constants.UserInput.JUMP, 1);
                 Toast.makeText(getApplicationContext(), "Jump", Toast.LENGTH_SHORT).show();
                 Log.v("Jump", "Jump");
                 pathlength++;

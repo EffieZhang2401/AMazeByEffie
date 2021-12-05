@@ -160,7 +160,7 @@ public class FirstPersonView {
 		this.panel = p;
 		panel.getBufferGraphics();
 		// viewers draw on the buffer graphics
-        if (panel.isOperational()==false) {
+        if (panel==null) {
             System.out.println("FirstPersonDrawer.draw: can't get graphics object to draw on, skipping redraw operation") ;
             return;
         }
@@ -168,7 +168,6 @@ public class FirstPersonView {
         // update fields angle, viewx, viewy for current position and viewing angle
         angle = ang ;
         setView(x, y, walkStep);
-        
         // update graphics
         // draw background figure: lightGrey to green on bottom half, yellow to gold on top half
         panel.addBackground(percentToExit);
@@ -184,6 +183,7 @@ public class FirstPersonView {
         		drawRectCounter = drawRectLateCounter = drawRectWallCounter = 0;
         //
         drawAllVisibleSectors(bspRoot);
+		panel.commit();
 	}
 
 
