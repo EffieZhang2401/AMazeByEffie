@@ -79,6 +79,20 @@ public interface RobotDriver {
 	 * @return the total length of the journey in number of cells traversed
 	 */
 	int getPathLength();
+	/**
+	 * Sets the animation speed that the driver is
+	 * pushing the robot through the maze at
+	 * @param speed
+	 */
+	public void setAnimationSpeed(int speed);
+
+
+	/**
+	 * Terminates the thread that is determining
+	 * the speed that the driver is going at and
+	 * that is running the driver
+	 */
+	public void terminateThread();
 	
 }
 

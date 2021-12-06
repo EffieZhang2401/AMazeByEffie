@@ -280,5 +280,15 @@ public class WallFollower implements RobotDriver {
 		return rob.getOdometerReading();
 	}
 
+	@Override
+	public void setAnimationSpeed(int speed) {
+
+	}
+
+	@Override
+	public void terminateThread() {
+
+	}
+
 
 }
