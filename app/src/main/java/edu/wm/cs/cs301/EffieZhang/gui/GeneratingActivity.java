@@ -187,10 +187,10 @@ public class GeneratingActivity extends AppCompatActivity implements Order{
         if(!deterministic&& revisit==false){
             Random rand = new Random();
             seed = rand.nextInt();
-            DataHolder.setSeed(seed);
         }
+        Revisit.setRevisit(skillLevel,bundle.getString("Maze Generator"),rooms,seed);
         if(revisit == true){
-            seed = DataHolder.getSeed();
+            seed = Revisit.getSeed();
         }
     }
 

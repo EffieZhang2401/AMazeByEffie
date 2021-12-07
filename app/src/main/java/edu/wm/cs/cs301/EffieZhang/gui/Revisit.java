@@ -12,37 +12,44 @@ public class Revisit {
     private static boolean room;
     private static int seed;
 
-    /**
-     * constructor of revisit
-     * @param skilllevel
-     * @param algorithm
-     * @param hasRoom
-     * @param seed
-     */
-    public Revisit(int skilllevel, String algorithm, boolean hasRoom, int seed){
+
+
+    public static void setRevisit(int skilllevel, String algor, boolean hasRoom, int mazeseed){
         skillLevel = skilllevel;
-        this.algorithm = algorithm;
+        algorithm = algor;
         room = hasRoom;
-        this.seed = seed;
+        seed = mazeseed;
     }
 
     /**
      * Get the last maze's skill level
      * @return skill level
      */
-    public int getSkillLevel(){
+    public static int getSkillLevel(){
         return skillLevel;
     }
 
-    public String getAlgorithm(){
+    /**
+     * get algorithm
+     * @return algorithm
+     */
+    public static String getAlgorithm(){
         return algorithm;
     }
 
-    public boolean getRoom(){
+    /**
+     * get room
+     * @return has or not has room
+     */
+    public static boolean getRoom(){
         return room;
     }
 
-    public int getSeed(){
+    /**
+     * get seed
+     * @return seed
+     */
+    public static int getSeed(){
         return seed;
     }
 

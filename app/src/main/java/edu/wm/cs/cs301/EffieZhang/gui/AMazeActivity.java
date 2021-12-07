@@ -89,12 +89,12 @@ public class AMazeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), GeneratingActivity.class);
-                Bundle bundle = getIntent().getExtras();
-                bundle.putString("Energy Consumption", null);
+                Bundle bundle = new Bundle();
+                //bundle.putString("Energy Consumption", null);
                 bundle.putBoolean("Revisit", true);
-                bundle.putInt("Skill Level", DataHolder.getSkillLevel());
-                bundle.putString("Maze Generator", DataHolder.getMazeAlgorithm());
-                bundle.putBoolean("Rooms", DataHolder.getRoomsOrNoRooms());
+                bundle.putInt("Skill Level", Revisit.getSkillLevel());
+                bundle.putString("Maze Generator", Revisit.getAlgorithm());
+                bundle.putBoolean("Rooms", Revisit.getRoom());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
