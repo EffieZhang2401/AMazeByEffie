@@ -177,7 +177,7 @@ public class StatePlaying{
                         playManuallyActivity.sendWinningMessage(panel);
                     }
                     else{
-                        //playAnimationActivity.sendWinningMessage(panel);
+                        playAnimationActivity.sendWinningMessage(panel);
                     }
                     break;
                 }
@@ -198,7 +198,7 @@ public class StatePlaying{
                         playManuallyActivity.sendWinningMessage(panel);
                     }
                     else{
-                        //playAnimationActivity.sendWinningMessage(panel);
+                        playAnimationActivity.sendWinningMessage(panel);
                     }
                 }
                 break;

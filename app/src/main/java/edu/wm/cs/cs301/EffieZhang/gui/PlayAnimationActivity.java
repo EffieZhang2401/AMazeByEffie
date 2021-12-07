@@ -36,6 +36,7 @@ import android.widget.Toast;
 public class PlayAnimationActivity extends AppCompatActivity {
     private static final int MAX_MAP_SIZE = 80;  //max size that the map can be
     private static final int MAX_ANIMATION_SPEED = 20;  //max animation speed for the robot
+    private static final int MIN_MAP_SIZE = 1;
     private static final int ROBOT_INITIAL_ENERGY = 3500;  //amount of energy driver starts with
     private static final String TAG = "message";
     private int mapSize = 15;  //default map size
@@ -66,6 +67,10 @@ public class PlayAnimationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.state_playanimation);
         setProgressBar();
+        int[] startPos = GeneratingActivity.mazeConfig.getStartingPosition();
+        shortestPathLength = GeneratingActivity.mazeConfig.getDistanceToExit(startPos[0], startPos[1])-1;
+        PlayManuallyActivity.shortestPathLength = shortestPathLength;
+
         //set sensor
         sensorConfig = DataHolder.getRobotConfig();
         currentSensors = new boolean[]{true, true, true, true};
@@ -121,6 +126,14 @@ public class PlayAnimationActivity extends AppCompatActivity {
                 }
             }
         };
+        ToggleButton showMap = (ToggleButton) findViewById(R.id.showMap);
+        showMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                statePlaying.keyDown(Constants.UserInput.TOGGLELOCALMAP, 1);
+                Log.v(TAG, "Showing Map: On");
+            }
+        });
     }
 
     /**
@@ -249,6 +262,28 @@ public class PlayAnimationActivity extends AppCompatActivity {
         }
         else{
             pathLength = wallFollower.getPathLength();
+            energyConsump = (int)wallFollower.getEnergyConsumption();
+        }
+        DataHolder.setPathlength(pathLength);
+        DataHolder.setEnergyConsumption(energyConsump);
+        startActivity(intent);
+    }
+
+    /**
+     * This method makes the app switch
+     * to the WinningActivity
+     * @param view of the GO2WINNING button
+     */
+    public void sendWinningMessage(View view){
+        Intent intent = new Intent(this, WinningActivity.class);
+        int energyConsump = 0;
+        int pathLength = 0;
+        if(isWizard){
+            pathLength = wizard.getPathLength()-1;
+            energyConsump = (int)wizard.getEnergyConsumption();
+        }
+        else{
+            pathLength = wallFollower.getPathLength()-1;
             energyConsump = (int)wallFollower.getEnergyConsumption();
         }
         DataHolder.setPathlength(pathLength);
