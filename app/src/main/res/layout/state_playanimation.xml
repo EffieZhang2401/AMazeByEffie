@@ -100,6 +100,7 @@
         android:layout_marginBottom="31dp"
         android:fontFamily="@font/aclonica"
         android:textColor="@color/pink"
+        android:checked="false"
         android:text="ToggleButton"
         android:textOff="PAUSE"
         android:textOn="START"

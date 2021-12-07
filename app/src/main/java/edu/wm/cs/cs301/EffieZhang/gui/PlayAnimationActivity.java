@@ -102,14 +102,36 @@ public class PlayAnimationActivity extends AppCompatActivity {
                 if(playPauseButton.isChecked()) {
                     Toast.makeText(getApplicationContext(), "Pause", Toast.LENGTH_SHORT).show();
                     Log.v("Pause toast", "Pressed Pause");
+                    if(isWizard){
+                        wizard.terminateThread();
+                    }
+                    else{
+                        wallFollower.terminateThread();
+                    }
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Start", Toast.LENGTH_SHORT).show();
                     Log.v("Start toast", "Pressed Start");
+                    if(isWizard){
+                        try{
+                            wizard.drive2Exit();
+                        }
+                        catch(Exception e){
+                            sendLosingMessage(panel);
+                        }
+                    }
+                    else{
+                        try{
+
+                            setWallFollowerPlaying();
+                        }
+                        catch(Exception e){
+                            sendLosingMessage(panel);
+                        }
+                    }
                 }
             }
         });
-
 
         myHandler = new Handler(Looper.getMainLooper()){
             @Override
