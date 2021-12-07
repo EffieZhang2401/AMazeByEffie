@@ -57,7 +57,7 @@ public class AMazeActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Toast.makeText(AMazeActivity.this, "Maze level is :" + progressChangedValue,
                         Toast.LENGTH_SHORT).show();
-                DataHolder.setSkillLevel(chosenSkillLevel[0]);
+                //DataHolder.setSkillLevel(chosenSkillLevel[0]);
             }
         });
         mazeSelectSpinner = getSpinner();
@@ -88,11 +88,15 @@ public class AMazeActivity extends AppCompatActivity {
         revisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent next = new Intent(getApplicationContext(), GeneratingActivity.class);
-                next.putExtra("Skill Level", seekbar.getProgress());
-                Toast.makeText(getApplicationContext(), "Pressed Revisit", Toast.LENGTH_SHORT).show();
-                Log.v("Revisit toast", "Pressed Revisit");
-                startActivity(next);
+                Intent intent = new Intent(getApplicationContext(), GeneratingActivity.class);
+                Bundle bundle = getIntent().getExtras();
+                bundle.putString("Energy Consumption", null);
+                bundle.putBoolean("Revisit", true);
+                bundle.putInt("Skill Level", DataHolder.getSkillLevel());
+                bundle.putString("Maze Generator", DataHolder.getMazeAlgorithm());
+                bundle.putBoolean("Rooms", DataHolder.getRoomsOrNoRooms());
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
 
@@ -107,7 +111,8 @@ public class AMazeActivity extends AppCompatActivity {
                 } else{
                     DataHolder.setRoomsOrNoRooms(false);
                 }
-
+                DataHolder.setSkillLevel(chosenSkillLevel[0]);
+                DataHolder.setMazeAlgorithm(mazeSelectSpinner.getSelectedItem().toString());
                 Toast.makeText(getApplicationContext(), "Pressed Explore", Toast.LENGTH_SHORT).show();
                 Log.v("Explore toast", "Pressed Explore");
                 Bundle bundle = new Bundle();

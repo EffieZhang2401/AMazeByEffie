@@ -52,6 +52,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order{
     private Order.Builder builder;  // builder for the maze
     private int skillLevel;  // difficulty level of the maze
     private boolean rooms;  // whether or not the maze has rooms
+    private boolean revisit;
     private int seed;  // seed to generate random maze
     protected MazeFactory factory;  // factory created to order maze
     private int percentdone;  // gives the percent that the maze has loaded
@@ -72,6 +73,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order{
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         factory= new MazeFactory();
         Bundle bundle = getIntent().getExtras();
+        revisit = bundle.getBoolean("Revisit");
         init(bundle);
         factory.order(this);
         setContentView(R.layout.state_generating);
@@ -182,9 +184,13 @@ public class GeneratingActivity extends AppCompatActivity implements Order{
         }
         skillLevel = bundle.getInt("Skill Level");
         rooms = bundle.getBoolean("Rooms");
-        if(!deterministic){
+        if(!deterministic&& revisit==false){
             Random rand = new Random();
             seed = rand.nextInt();
+            DataHolder.setSeed(seed);
+        }
+        if(revisit == true){
+            seed = DataHolder.getSeed();
         }
     }
 

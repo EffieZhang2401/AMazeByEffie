@@ -8,6 +8,9 @@ import edu.wm.cs.cs301.EffieZhang.generation.Maze;
  * It has the set method and get method to receive and transfer data
  * It stores the data of mazelevel, driver, robot, algorithm,
  * hasroom, and pathlength.
+ *
+ * collaborators:
+ *
  * @author effiezhang
  */
 public class DataHolder{
