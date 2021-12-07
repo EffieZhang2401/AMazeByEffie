@@ -53,10 +53,10 @@ public class UnreliableRobot extends ReliableRobot implements Robot {
 
 	public void setPlayAnimationActivity(PlayAnimationActivity playAnimationActivity){
 		this.playAnimationActivity = playAnimationActivity;
-		//this.leftSensor = playAnimationActivity.getSensor(Direction.LEFT);
-		//this.rightSensor = playAnimationActivity.getSensor(Direction.RIGHT);
-		//this.frontSensor = playAnimationActivity.getSensor(Direction.FORWARD);
-		//this.backSensor = playAnimationActivity.getSensor(Direction.BACKWARD);
+		this.leftSensor = playAnimationActivity.getSensor(Direction.LEFT);
+		this.rightSensor = playAnimationActivity.getSensor(Direction.RIGHT);
+		this.frontSensor = playAnimationActivity.getSensor(Direction.FORWARD);
+		this.backSensor = playAnimationActivity.getSensor(Direction.BACKWARD);
 	}
 
 	/**
@@ -169,13 +169,13 @@ public class UnreliableRobot extends ReliableRobot implements Robot {
 	private DistanceSensor getSensor(Direction direction) {
 		switch(direction){
 			case FORWARD :
-				//return playAnimationActivity.getSensor(Direction.FORWARD);
+				return playAnimationActivity.getSensor(Direction.FORWARD);
 			case BACKWARD :
-				//return playAnimationActivity.getSensor(Direction.BACKWARD);
+				return playAnimationActivity.getSensor(Direction.BACKWARD);
 			case LEFT :
-				//return playAnimationActivity.getSensor(Direction.LEFT);
+				return playAnimationActivity.getSensor(Direction.LEFT);
 			case RIGHT :
-				//return playAnimationActivity.getSensor(Direction.RIGHT);
+				return playAnimationActivity.getSensor(Direction.RIGHT);
 		}
 		return frontSensor;
 	}

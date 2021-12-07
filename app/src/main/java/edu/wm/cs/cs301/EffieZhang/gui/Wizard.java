@@ -20,7 +20,7 @@ import android.os.Message;
  *
  */
 
-public class Wizard extends WallFollower implements RobotDriver{
+public class Wizard implements RobotDriver{
 	private static final String TAG = "Wizard";  //message key
 	private static final String KEY = "my message key";  //message key
 	private Robot robot;

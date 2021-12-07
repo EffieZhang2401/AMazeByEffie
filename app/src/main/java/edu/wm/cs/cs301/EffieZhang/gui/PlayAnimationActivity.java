@@ -88,7 +88,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
             setWizardPlaying();
         }
         else{
-            //setWallFollowerPlaying();
+            setWallFollowerPlaying();
         }
         setSizeOfMap();
         setSensorColor();
@@ -109,6 +109,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
                 }
             }
         });
+
 
         myHandler = new Handler(Looper.getMainLooper()){
             @Override
@@ -227,6 +228,86 @@ public class PlayAnimationActivity extends AppCompatActivity {
             sendLosingMessage(panel);
         }
     }
+    /**
+     * Sets up the wallFollower class and everything
+     * that is necessary for the wallFollower to run
+     * so that the maze is solved automatically by
+     * the wallFollower algorithm
+     */
+    private void setWallFollowerPlaying() {
+        boolean resume = false;
+        Log.v(TAG, "setting WallFollower as Animated Driver");
+        if(wallFollower == null) {
+            currentSensors = new boolean[]{true, true, true, true};
+            robot = new UnreliableRobot();
+            wallFollower = new WallFollower();
+            robot.setStatePlaying(statePlaying);
+            robot.setPlayAnimationActivity(this);
+        }
+        else{
+            resume = true;
+        }
+        if(reliableSensor != null) {
+            for(int i = 0; i < reliableSensor.length; i++) {
+                if(reliableSensor[i]) {
+                    switch(i) {
+                        case 0:
+                            setSensor("front", true);
+                            break;
+                        case 1:
+                            setSensor("left", true);
+                            break;
+                        case 2:
+                            setSensor("right", true);
+                            break;
+                        case 3:
+                            setSensor("back", true);
+                            break;
+                    }
+                }
+                else {
+                    if(i-1 >= 0 && !reliableSensor[i-1] || i-2 >= 0 && !reliableSensor[i-2] || i-3 >= 0 && !reliableSensor[i-3]) {
+                        try {
+                            Thread.sleep(1300);
+                        }
+                        catch(Exception e) {
+                            System.out.println("wallFollowerPlaying in Controller.java: Error with sleeping");
+                        }
+                    }
+
+                    switch(i) {
+                        case 0:
+                            setSensor("front", false);
+                            break;
+                        case 1:
+                            setSensor("left", false);
+                            break;
+                        case 2:
+                            setSensor("right", false);
+                            break;
+                        case 3:
+                            setSensor("back", false);
+                            break;
+                    }
+                }
+            }
+        }
+        else {
+            setSensor("front", true);
+            setSensor("left", true);
+            setSensor("right", true);
+            setSensor("back", true);
+        }
+        wallFollower.setRobot(robot);
+        wallFollower.setMaze(GeneratingActivity.mazeConfig);
+        try {
+            wallFollower.drive2Exit();
+        }
+        catch(Exception e) {
+            sendLosingMessage(panel);
+        }
+    }
+
 
     /**
      * This method returns the sensor that corresponds
