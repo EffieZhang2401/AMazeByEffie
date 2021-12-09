@@ -37,6 +37,8 @@ public class AMazeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.state_title);
+        Intent intent = new Intent(AMazeActivity.this, BackgroundSoundService.class);
+        startService(intent);
         SeekBar seekbar = (SeekBar)findViewById(R.id.skillBar);
         seekbar.setMax(9);
         seekbar.setProgress(0);
@@ -155,5 +157,9 @@ public class AMazeActivity extends AppCompatActivity {
             }
         });
         return mazeSelectSpinner;
+    }
+    public void PlayBackgroundSound(View view) {
+        Intent intent = new Intent(AMazeActivity.this, BackgroundSoundService.class);
+        startService(intent);
     }
 }

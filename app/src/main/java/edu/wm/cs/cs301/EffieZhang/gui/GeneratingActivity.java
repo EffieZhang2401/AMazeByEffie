@@ -255,4 +255,6 @@ public class GeneratingActivity extends AppCompatActivity implements Order{
         handler.sendMessage(message);
     }
 
+
+
 }
