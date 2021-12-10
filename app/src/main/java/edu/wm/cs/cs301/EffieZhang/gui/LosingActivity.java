@@ -2,8 +2,13 @@ package edu.wm.cs.cs301.EffieZhang.gui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import edu.wm.cs.cs301.EffieZhang.R;
+
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.content.Intent;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -61,6 +66,12 @@ public class LosingActivity extends AppCompatActivity {
         }
         else{
             reason.setText("Lost Reason: Robot is broken");
+        }
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            vibrator.vibrate(500);
         }
     }
     /**

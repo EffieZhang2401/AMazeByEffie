@@ -9,6 +9,10 @@ import android.view.View;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.content.Context;
+import android.os.Build;
 /**
  * This class shows a winning message for the player, which includes
  * the length of the shortest path through the maze, the length of the
@@ -27,6 +31,12 @@ public class WinningActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.state_winning);
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            vibrator.vibrate(500);
+        }
         Button back = (Button) findViewById(R.id.playagain);
         back.setOnClickListener(new View.OnClickListener(){
             @Override
