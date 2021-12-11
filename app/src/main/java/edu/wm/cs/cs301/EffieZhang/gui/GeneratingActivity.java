@@ -140,7 +140,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order{
             public void handleMessage(Message msg){
                 Bundle bundle = msg.getData();
                 int progressBarMessage = bundle.getInt(PROGRESS_KEY);
-                //showStartButton(loadingBar);
+                Log.v(TAG, "Loading bar: " + loadingBar.toString());
             }
         };
 
@@ -254,6 +254,19 @@ public class GeneratingActivity extends AppCompatActivity implements Order{
         message.setData(bundle);
         handler.sendMessage(message);
     }
+
+    /**
+     * This method tells when the back
+     * button has been pressed and then
+     * goes back to the title screen activity.
+     */
+    @Override
+    public void onBackPressed(){
+        Log.v(TAG, "back button pressed in Generating Activity");
+        backPressed = true;
+        super.onBackPressed();
+    }
+
 
 
 
